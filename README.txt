@@ -4,13 +4,13 @@ Bug-1:
 URL: http://localhost:8000/api/wce
 Method: GET
 Error: Dashboard shows capacity error when STS manager enters.
-Fixed?: Yes
 Solution: Handle null values for stsId and vehicleId. This is the main issue.
+Fixed?: Yes
 
 Bug-2:
 Description: Landfill capacity displays negative value.
+Solution: Implement add, delete, and update functionalities for capacity field with proper condition.
 Fixed?: Yes
-Solution: Implement add, delete, and update functionalities for capacity field.
 
 
 Task list:
@@ -21,10 +21,15 @@ Complete: Yes
 
 Task-2:
 Description: Implement route selection.
+Solution: Use react-leaflet and leaflet-routing-machine
 Complete: Yes
 
 Task-3:
 Description: Efficient use trucks, based on fuel consumption cost.
+Solution: Calculate the cost per kilometer based on load:
+          formulas: C(journey) = C(unloaded) + loaded capacity/total track capacity X (C(loaded) - C(unloaded))
+          then sort the track list based on cost per kilometer.
+Complete: Yes
 
 Task-4:
 Description: reset password when user loged in.
