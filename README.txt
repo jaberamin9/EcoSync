@@ -1,30 +1,41 @@
-Team Name: RANDOMTHREE
-Institution Name: International Islamic University Chittagong (IIUC)
+Bug list:
 
-Participant 1:
-Name: Jaber Amin
-Email: jaberamin9@gmail.com
+Bug-1:
+URL: http://localhost:8000/api/wce
+Method: GET
+Error: Dashboard shows capacity error when STS manager enters.
+Fixed?: Yes
+Solution: Handle null values for stsId and vehicleId. This is the main issue.
 
-Participant 2:
-Name: Sarawar Hossain
-Email: sarawarhossain13@gmail.com
-
-Participant 3:
-Name: Mohammad Nayemul Islam
-Email: nayem1010s@gmail.com
+Bug-2:
+Description: Landfill capacity displays negative value.
+Fixed?: Yes
+Solution: Implement add, delete, and update functionalities for capacity field.
 
 
-how to run:
+Task list:
 
-1. npm install next
-2. npm run dev
-3. email :admin@gmail.com
-   pass  :admin
+Task-1:
+Description: Implement UI for single and multi spinners.
+Complete: Yes
 
-for otp:
+Task-2:
+Description: Implement route selection.
+Complete: Yes
 
-https://mailtrap.io/
+Task-3:
+Description: Efficient use trucks, based on fuel consumption cost.
 
-use this google account
-email: code37969@gmail.com
-pass: code(12)
+Task-4:
+Description: reset password when user loged in.
+
+Task-5:
+Description: The system should assist finding the required number of trucks to transfer 
+             maximum possible waste from the STS to the Landfill. The following parameters can be
+             taken into consideration:
+               ○ Each truck can have at most 3 trips.
+               ○ Trucks should be chosen to first ensure minimum fuel consumption cost,
+                 second to ensure minimum number of trucks.
+
+Task-6:
+Description: Increase reusability of components wherever possible.
