@@ -25,7 +25,15 @@ export default function LandfillOperation() {
                         wardNumber: item.wardNumber,
                         capacity: item.capacity,
                         location: [item.latitude, item.longitude],
-                        manager: item.manager.map(manager => manager.email),
+                        manager: item.manager.map((items, idx) => {
+                            if ((item.manager.length - 1) == idx) {
+                                return items.email
+                            } else {
+                                return items.email + ", "
+                            }
+                        }),
+                        manager_id: item.manager.map(manager => manager._id),
+
                     }
                 })
                 return newData

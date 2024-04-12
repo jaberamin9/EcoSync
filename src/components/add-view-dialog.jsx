@@ -1,10 +1,8 @@
 "use client"
-import { Copy, Loader2 } from "lucide-react"
-
+import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
-    DialogClose,
     DialogContent,
     DialogDescription,
     DialogFooter,
@@ -12,22 +10,14 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useState } from "react"
+import { useQueryClient } from "@tanstack/react-query";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { Icon } from "@iconify/react"
 
-import { format } from "date-fns"
-import { Calendar as CalendarIcon } from "lucide-react"
-
-import { cn } from "@/lib/utils"
-import { Calendar } from "@/components/ui/calendar"
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover"
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 async function updateWde(credentials, id) {
     return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/wde/${id}`, {
@@ -60,20 +50,10 @@ async function updateStatus(credentials, id) {
 }
 
 
-async function updateMyLandfill(credentials, id) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/landfill/${id}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(credentials)
-    }).then(data => data.json())
-}
-
 
 export function AddViewDialog({ isUpdate, open, setOpen, wde, addWde = false }) {
-    const [arrivalTime, setArrivalTime] = useState(addWde ? "" : (wde) ? wde.arrivalTime : "")
-    const [departureTime, setDepartureTime] = useState(addWde ? "" : (wde) ? wde.departureTime : "")
+    const [arrivalTime, setArrivalTime] = useState(addWde ? new Date() : (wde) ? wde.arrivalTime : new Date())
+    const [departureTime, setDepartureTime] = useState(addWde ? new Date() : (wde) ? wde.departureTime : new Date())
     const [volume, setVolume] = useState((wde) ? wde.volumeDisposed ? wde.volumeDisposed : wde.volumeCollection : "")
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
@@ -108,11 +88,7 @@ export function AddViewDialog({ isUpdate, open, setOpen, wde, addWde = false }) 
                 const update_status = await updateStatus({
                     running: false
                 }, wde.id);
-                const update_status2 = await updateMyLandfill({
-                    capacity: (Number(wde.landfill_capacity) - Number(volume))
-                }, wde.landfill_id);
 
-                console.log(update_status2, update_status)
                 if (update_status.success) {
                     setLoading(false)
                     setOpen(false)
@@ -145,56 +121,35 @@ export function AddViewDialog({ isUpdate, open, setOpen, wde, addWde = false }) 
                     <Label htmlFor="disposed">Volume Disposed</Label>
                     <Input onChange={e => setVolume(e.target.value)} value={volume} className="w-[300px] h-9" type="text" placeholder="Volume Disposed" />
                 </div>
+
+
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="disposed">Arrival Time</Label>
-                    <Popover>
-                        <PopoverTrigger asChild>
-                            <Button
-                                variant={"outline"}
-                                className={cn(
-                                    "w-[300px] justify-start text-left font-normal",
-                                    !arrivalTime && "text-muted-foreground"
-                                )}
-                            >
-                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                {arrivalTime ? format(arrivalTime, "PPP") : <span>Pick a date</span>}
-                            </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0">
-                            <Calendar
-                                mode="single"
-                                selected={arrivalTime}
-                                onSelect={setArrivalTime}
-                                initialFocus
-                            />
-                        </PopoverContent>
-                    </Popover>
+                    <DatePicker
+                        className="h-[32px] flex items-center focus-visible:outline-none focus-visible:border-2 focus-visible:bg-[#f1f5f9] hover:bg-[#f1f5f9] hover:cursor-pointer focus-visible:border-[#e2e8f0]  border-[#e2e8f0] border-2 rounded-md w-full"
+                        dateFormat="dd/MM/yyyy h:mm aa"
+                        showIcon
+                        showTimeInput
+                        timeInputLabel="Time:"
+                        selected={arrivalTime}
+                        onChange={(date) => setArrivalTime(date)}
+                        icon={<Icon icon="uil:calender" width="24" height="24" />}
+                    />
                 </div>
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="disposed">Departure Time</Label>
-                    <Popover>
-                        <PopoverTrigger asChild>
-                            <Button
-                                variant={"outline"}
-                                className={cn(
-                                    "w-[300px] justify-start text-left font-normal",
-                                    !departureTime && "text-muted-foreground"
-                                )}
-                            >
-                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                {departureTime ? format(departureTime, "PPP") : <span>Pick a date</span>}
-                            </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0">
-                            <Calendar
-                                mode="single"
-                                selected={departureTime}
-                                onSelect={setDepartureTime}
-                                initialFocus
-                            />
-                        </PopoverContent>
-                    </Popover>
+                    <DatePicker
+                        className="h-[32px] focus-visible:outline-none focus-visible:border-2 focus-visible:bg-[#f1f5f9] hover:bg-[#f1f5f9] hover:cursor-pointer focus-visible:border-[#e2e8f0]  border-[#e2e8f0] border-2 rounded-md w-full"
+                        dateFormat="dd/MM/yyyy h:mm aa"
+                        showIcon
+                        showTimeInput
+                        timeInputLabel="Time:"
+                        selected={departureTime}
+                        onChange={(date) => setDepartureTime(date)}
+                        icon={<Icon icon="uil:calender" width="24" height="24" />}
+                    />
                 </div>
+
 
                 {error != "" ? <p className="text-[11px] bg-red-100 p-1 rounded-md mx-6 text-center">{error}</p> : ""}
 

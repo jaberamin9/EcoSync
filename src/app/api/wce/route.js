@@ -20,7 +20,7 @@ export async function GET(req) {
                 .sort({ 'departureTime': 1 });
 
             const newWce = wce.filter((item) => {
-                return item.landfillId != null
+                return item.landfillId != null && item.stsId != null && item.vehicleId != null
             })
 
             return NextResponse.json({
@@ -124,15 +124,19 @@ export async function POST(req) {
         const reqBody = await req.json()
         const { stsId, vehicleId, landfillId, volumeCollection, arrivalTime, departureTime, totlaKiloMeter } = reqBody
 
+        //check if user already exists
+        // const isWceExists = await Wce.findOne({ stsId })
 
-        const isSpaceAvailable = await Landfill.findOne({ _id: landfillId })
+        // if (isWceExists) {
+        //     return NextResponse.json({ success: false, error: "WCE already exists" }, { status: 400 })
+        // }
+        // const duplicateValue = Wce.aggregate(
+        //     { $group: { _id: "$vehicleId", total: { $sum: 1 } } },
+        //     { $match: { total: { $gte: 2 } } },
+        //     { $sort: { total: -1 } },
+        //     { $limit: 5 }
+        // );
 
-        if (isSpaceAvailable.capacity < volumeCollection) {
-            return NextResponse.json({
-                success: false,
-                error: "no available space",
-            }, { status: 400 })
-        }
 
         const newWce = new Wce({
             stsId,

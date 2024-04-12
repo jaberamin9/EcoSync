@@ -143,8 +143,7 @@ export const columns = [
                 <div className="flex justify-center" onClick={() => setOpen(true)}>
                     <div className="cursor-pointer text-center bg-green-400 text-white rounded-sm w-[100px] p-1">see on map</div>
                 </div>
-                <Map location={row.getValue("location")} open={open} setOpen={setOpen}></Map>
-
+                <Map location={row.getValue("location")} open={open} setOpen={setOpen} popupText={row.original.landfillName}></Map>
             </>
         },
     },

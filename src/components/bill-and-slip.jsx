@@ -1,33 +1,13 @@
 "use client"
-import { Copy, Loader2 } from "lucide-react"
-
-import { Button } from "@/components/ui/button"
 import {
     Dialog,
-    DialogClose,
     DialogContent,
-    DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog"
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useState } from "react"
 
-import { format } from "date-fns"
-import { Calendar as CalendarIcon } from "lucide-react"
 
-import { cn } from "@/lib/utils"
-import { Calendar } from "@/components/ui/calendar"
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover"
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 
 function formatDate(dateVal) {
     var newDate = new Date(dateVal);
@@ -55,13 +35,6 @@ function padValue(value) {
 }
 
 export function BillAndSlip({ open, setOpen, data }) {
-    const [arrivalTime, setArrivalTime] = useState("")
-    const [departureTime, setDepartureTime] = useState("")
-    const [volume, setVolume] = useState("")
-    const [error, setError] = useState("")
-    const [loading, setLoading] = useState(false)
-
-
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="sm:max-w-md w-auto">
@@ -71,7 +44,7 @@ export function BillAndSlip({ open, setOpen, data }) {
 
                 <div className="w-auto flex items-center gap-24 font-bold">
                     <p className="text-[14px]">Time: {data ? formatDate(data.time) : ""}</p>
-                    <p className="text-[14px]">Total Fuel: {data ? data.totalFuel : ""}T</p>
+                    <p className="text-[14px]">Total Fuel: {data ? data.totalFuel : ""}L</p>
                 </div>
                 <div className="w-auto flex items-center gap-24 font-bold">
                     <p className="text-[14px]">Volume Disposed: {data ? data.volumeDisposed : ""}T</p>
@@ -87,12 +60,6 @@ export function BillAndSlip({ open, setOpen, data }) {
                 <div className="w-auto flex items-center gap-24 font-bold">
                     <p className="text-[14px]">Total Fuel Cost: {data ? Math.round(data.totalFuelCost) : ""}৳</p>
                 </div>
-                {/* <DialogFooter className="sm:justify-end">
-                    <Button type="submit" variant="secondary" disabled={loading}>
-                        PDF
-                        {loading ? <Loader2 className="ml-2 h-4 w-4 animate-spin" /> : ""}
-                    </Button>
-                </DialogFooter> */}
             </DialogContent>
         </Dialog >
     )

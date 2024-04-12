@@ -28,6 +28,7 @@ export default function LandfillOperation() {
                         capacity: item.capacity,
                         fuelcostLoaded: item.fuelcostLoaded,
                         fuelcostUnloaded: item.fuelcostUnloaded,
+                        sts_id: item.stsId._id,
                         stsWardNumber: item.stsId.wardNumber,
                         stsCapacity: item.stsId.capacity,
                     }

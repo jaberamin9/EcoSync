@@ -28,7 +28,8 @@ if (role == "System Admin") {
             submenu: true,
             subMenuItems: [
                 { title: 'Landfill Operation', path: '/ui/dashboard/landfill' },
-                { title: 'Landfill-wde', path: '/ui/dashboard/landfill/arrived' },
+                { title: 'Incoming', path: '/ui/dashboard/landfill/incoming' },
+                { title: 'Arrived', path: '/ui/dashboard/landfill/arrived' },
             ],
         }, {
             title: 'Vehicles',

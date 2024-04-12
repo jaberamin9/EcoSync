@@ -15,8 +15,10 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import SelectDropdown2 from "@/components/SelectDropdown2";
 import { useRouter } from "next/navigation";
+import SelectDropdown from "@/components/SelectDropdown";
+
+
 
 async function getRole() {
     return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/users/roles`, {
@@ -48,14 +50,16 @@ export default function LandfillOperation() {
         const [selectedRole, setSelectedRole] = useState();
         const [error, setError] = useState("")
         const [loading, setLoading] = useState(false)
+        const [open1, setOpen1] = useState(false)
+
 
         const handleSubmit = async () => {
             const res = await getRole();
             if (res.success) {
                 const newData = res.roles.map((item) => {
                     return {
-                        id: item._id,
-                        role: item.role
+                        value: item.role,
+                        label: item.role
                     }
                 })
                 setRoleList(newData)
@@ -66,7 +70,6 @@ export default function LandfillOperation() {
 
         const handleSubmitForAssignRole = async () => {
             setLoading(true)
-            console.log(userId, selectedRole)
             const res = await assignRole({
                 role: selectedRole
             }, userId);
@@ -121,7 +124,14 @@ export default function LandfillOperation() {
                                         <div onClick={handleSubmit} className="grid w-full items-center gap-4">
                                             <div className="flex flex-col space-y-1.5">
                                                 <Label htmlFor="framework">Select one</Label>
-                                                <SelectDropdown2 formFieldName="selectrole" options={roleList} onChange={(val) => setSelectedRole(val)}></SelectDropdown2>
+                                                <SelectDropdown
+                                                    open={open1}
+                                                    setOpen={setOpen1}
+                                                    value={selectedRole}
+                                                    setValue={setSelectedRole}
+                                                    data={roleList}
+                                                    selectName="select one">
+                                                </SelectDropdown>
                                             </div>
                                         </div>
                                     </form>

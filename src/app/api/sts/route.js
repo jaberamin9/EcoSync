@@ -11,12 +11,12 @@ export async function GET(req) {
     try {
         const logedInUser = await getDataFromToken(req);
         if (logedInUser.role == "STS Manager") {
-            const sts = await Sts.find({ 'manager': logedInUser.id }).select("id")
+            const sts = await Sts.find({ 'manager': logedInUser.id }).select("id wardNumber latitude longitude")
                 .populate({ path: 'manager', select: '_id', model: User });
 
             return NextResponse.json({
                 success: true,
-                sts: sts[0] ? sts[0]._id : sts
+                sts: sts[0] ? sts[0] : sts
             }, { status: 200 })
         }
 

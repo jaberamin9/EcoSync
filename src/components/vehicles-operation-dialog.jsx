@@ -1,47 +1,20 @@
 "use client"
-import { Copy, Loader2 } from "lucide-react"
-
+import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
-    DialogClose,
     DialogContent,
     DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog"
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useEffect, useState } from "react"
-
-import { format } from "date-fns"
-import { Calendar as CalendarIcon } from "lucide-react"
-
-import { cn } from "@/lib/utils"
-import { Calendar } from "@/components/ui/calendar"
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover"
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import TimeRangePicker from "@wojtekmaj/react-timerange-picker"
-import Map from "@/components/map";
-
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
-import MultiSelectDropdown from "./MultiSelectDropdown"
+import { useQueryClient } from "@tanstack/react-query";
 import SelectDropdown from "./SelectDropdown"
+
 
 async function updateLandfill(credentials, id) {
     return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/vehicles/${id}`, {
@@ -72,26 +45,25 @@ async function getSts() {
 
 
 export function VehiclesOperationDialog({ open, setOpen, data, add = false }) {
-    const [vehicleId, setVehicleId] = useState(add ? "" : (data) ? data.vehicleId : "")
-    const [capacity, setCapacity] = useState(add ? "" : (data) ? data.capacity : "")
-    const [type, setType] = useState((data) ? data.type : "")
+    const [vehicleId, setVehicleId] = useState((data) ? data.vehicleId : "")
     const [fuelcostLoaded, setFuelcostLoaded] = useState((data) ? data.fuelcostLoaded : "")
     const [fuelcostUnloaded, setFuelCostUnloaded] = useState((data) ? data.fuelcostUnloaded : "")
-    const [stsId, SetStsId] = useState((data) ? data.stsId : "")
 
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
     const [stsList, setStsList] = useState([])
-    const [vehicleTypeSelected, setVehicleTypeSelected] = useState()
-    const [stsSelected, setStsSelected] = useState("")
+    const [vehicleTypeSelected, setVehicleTypeSelected] = useState((data) ? data.type + ":" + data.capacity : "")
+    const [stsSelected, setStsSelected] = useState((data) ? data.sts_id : "")
     const [loadings, setLoadings] = useState(true);
+    const [open1, setOpen1] = useState(false)
+    const [open2, setOpen2] = useState(false)
+
 
     const queryClient = useQueryClient();
 
     const handleSubmit = async () => {
         setLoading(true)
         const { type, capacity } = extract(vehicleTypeSelected)
-        const stsId = stsSelected.split(/\s*:\s*/)[1]
         let res
         if (add) {
             res = await addeLandfill({
@@ -100,7 +72,7 @@ export function VehiclesOperationDialog({ open, setOpen, data, add = false }) {
                 capacity,
                 fuelcostLoaded,
                 fuelcostUnloaded,
-                stsId
+                stsId: stsSelected
             });
         } else {
             res = await updateLandfill({
@@ -109,7 +81,7 @@ export function VehiclesOperationDialog({ open, setOpen, data, add = false }) {
                 capacity,
                 fuelcostLoaded,
                 fuelcostUnloaded,
-                stsId
+                stsId: stsSelected
             }, data.id);
         }
 
@@ -128,13 +100,13 @@ export function VehiclesOperationDialog({ open, setOpen, data, add = false }) {
         async function fetchData() {
             let res = await getSts();
             if (res.success) {
-                const newData = res.sts.map(item => {
+                const data = res.sts.map(item => {
                     return {
-                        id: item._id,
-                        value: item.wardNumber + ":" + item._id,
+                        value: item._id,
+                        label: "Ward Number: " + item.wardNumber,
                     }
                 })
-                setStsList(newData)
+                setStsList(data)
                 setLoadings(false)
             }
         }
@@ -142,10 +114,10 @@ export function VehiclesOperationDialog({ open, setOpen, data, add = false }) {
     }, []);
 
     const vehiclesType = [
-        { id: 1, value: 'Open Truck:3' },
-        { id: 2, value: 'Dump Truck:5' },
-        { id: 3, value: 'Compactor:7' },
-        { id: 4, value: 'Container Carrier:15' },
+        { value: 'Open Truck:3', label: 'Open Truck = 3T' },
+        { value: 'Dump Truck:5', label: 'Dump Truck = 5T' },
+        { value: 'Compactor:7', label: 'Compactor = 7T' },
+        { value: 'Container Carrier:15', label: 'Container Carrier = 15T' },
     ]
 
 
@@ -166,9 +138,13 @@ export function VehiclesOperationDialog({ open, setOpen, data, add = false }) {
 
                 <div className="grid w-[300px] max-w-sm items-center gap-1.5">
                     <Label htmlFor="disposed">Select vehicles type</Label>
-                    <SelectDropdown formFieldName={"vehiclesType"}
-                        options={vehiclesType}
-                        onChange={val => { setVehicleTypeSelected(val) }}>
+                    <SelectDropdown
+                        open={open2}
+                        setOpen={setOpen2}
+                        value={vehicleTypeSelected}
+                        setValue={setVehicleTypeSelected}
+                        data={vehiclesType}
+                        selectName="select vehicle">
                     </SelectDropdown>
                 </div>
 
@@ -184,10 +160,13 @@ export function VehiclesOperationDialog({ open, setOpen, data, add = false }) {
 
                 <div className="grid w-[300px] max-w-sm items-center gap-1.5">
                     <Label htmlFor="disposed">Select STS</Label>
-                    <SelectDropdown formFieldName={"sts"}
-                        options={stsList}
-                        onChange={val => { setStsSelected(val) }}
-                        vehicles={true}>
+                    <SelectDropdown
+                        open={open1}
+                        setOpen={setOpen1}
+                        value={stsSelected}
+                        setValue={setStsSelected}
+                        data={stsList}
+                        selectName="select sts">
                     </SelectDropdown>
                 </div>
 

@@ -1,12 +1,7 @@
 "use client"
 
-
 import * as React from "react"
 import {
-    ColumnDef,
-    ColumnFiltersState,
-    SortingState,
-    VisibilityState,
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
@@ -14,7 +9,6 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table"
-
 import {
     Table,
     TableBody,
@@ -29,22 +23,20 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { AddViewDialog } from '@/components/add-view-dialog'
 import { StsOperationDialog2 } from "@/components/sts-operation-dialog2"
-import { ScrollArea } from "@radix-ui/react-scroll-area"
+
 
 
 export function DataTable({
     columns,
     data,
 }) {
+    const role = localStorage.getItem('role');
     const [sorting, setSorting] = React.useState([])
     const [columnFilters, setColumnFilters] = React.useState([])
-    const [open, setOpen] = React.useState(false);
     const [columnVisibility, setColumnVisibility] = React.useState({})
+    const [open, setOpen] = React.useState(false);
 
     const table = useReactTable({
         data,
@@ -63,17 +55,10 @@ export function DataTable({
         }
     })
 
+
     return (
         <div>
             <div className="flex items-center py-4 gap-3">
-                <Input
-                    placeholder="Filter Vehicle Id..."
-                    value={(table.getColumn("landfillName")?.getFilterValue()) ?? ""}
-                    onChange={(event) =>
-                        table.getColumn("landfillName")?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
-                />
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="ml-auto">
@@ -102,11 +87,12 @@ export function DataTable({
                             })}
                     </DropdownMenuContent>
                 </DropdownMenu>
-                <Button className="h-9" onClick={() => setOpen(true)}>Add</Button>
-
+                {role == "System Admin" ? "" :
+                    <Button className="h-9" onClick={() => setOpen(true)}>Add</Button>
+                }
             </div>
             <div className="rounded-md border">
-                <Table className='bg-white '>
+                <Table className='bg-white'>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
@@ -125,7 +111,6 @@ export function DataTable({
                             </TableRow>
                         ))}
                     </TableHeader>
-
 
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
@@ -151,6 +136,7 @@ export function DataTable({
                             </TableRow>
                         )}
                     </TableBody>
+
                 </Table>
             </div >
             <div className="flex items-center justify-end space-x-2 py-4">
@@ -172,6 +158,7 @@ export function DataTable({
                 </Button>
             </div>
             <StsOperationDialog2 open={open} setOpen={setOpen} data={""} add={true}></StsOperationDialog2>
+
         </div >
     )
 }

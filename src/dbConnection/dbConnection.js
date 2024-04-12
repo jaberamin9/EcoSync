@@ -1,6 +1,12 @@
 import mongoose from 'mongoose';
 
+const connectio = {}
+
 export async function connect() {
+    if (connectio.isConnected) {
+        console.log("already mongo db connected")
+        return
+    }
     try {
         const DB_OPTIONS = {
             dbName: process.env.DB_NAME,
@@ -8,19 +14,13 @@ export async function connect() {
             pass: process.env.DB_PASS,
             authSource: process.env.DB_AUTHSOURCE
         }
-        await mongoose.connect(process.env.MONGO_DB_URI, DB_OPTIONS);
+        const db = await mongoose.connect(process.env.MONGO_DB_URI || '', DB_OPTIONS);
+        connectio.isConnected = db.connections[0].readyState
 
-        mongoose.connection.on('connected', () => {
-            console.log('MongoDB connected successfully');
-        })
-
-        mongoose.connection.on('error', (err) => {
-            console.log('MongoDB connection error.' + err);
-            process.exit();
-        })
-
+        console.log('MongoDB connected successfully');
     } catch (error) {
         console.log('Something goes wrong!');
         console.log(error);
+        process.exit()
     }
 }

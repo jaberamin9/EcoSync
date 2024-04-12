@@ -1,9 +1,7 @@
 "use client"
 
-import { ColumnDef } from "@tanstack/react-table"
 import { MoreHorizontal, ArrowUpDown } from "lucide-react"
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
@@ -14,13 +12,11 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useToast } from "@/components/ui/use-toast";
-import { AddViewDialog } from "@/components/add-view-dialog";
 import { useState } from "react";
-import { BillAndSlip } from "@/components/bill-and-slip";
 import Map from "@/components/map";
-import LandfillOperation from "./page";
-import { LandfillOperationDialog } from "@/components/landfill-operation-dialog";
 import { StsOperationDialog } from "@/components/sts-operation-dialog";
+
+
 
 async function getBill(id) {
     return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/wde/${id}/bill`, {
@@ -28,30 +24,6 @@ async function getBill(id) {
     }).then(data => data.json())
 }
 
-function formatDate(dateVal) {
-    var newDate = new Date(dateVal);
-    var sMonth = padValue(newDate.getMonth() + 1);
-    var sDay = padValue(newDate.getDate());
-    var sYear = newDate.getFullYear();
-    var sHour = newDate.getHours();
-    var sMinute = padValue(newDate.getMinutes());
-    var sAMPM = "AM";
-    var iHourCheck = parseInt(sHour);
-    if (iHourCheck > 12) {
-        sAMPM = "PM";
-        sHour = iHourCheck - 12;
-    }
-    else if (iHourCheck === 0) {
-        sHour = "12";
-    }
-    sHour = padValue(sHour);
-    const date = sMonth + "/" + sDay + "/" + sYear
-    const time = sHour + ":" + sMinute + " " + sAMPM
-    return [date, time];
-}
-function padValue(value) {
-    return (value < 10) ? "0" + value : value;
-}
 
 export const columns = [
     {
@@ -125,7 +97,7 @@ export const columns = [
                 <div className="flex justify-center" onClick={() => setOpen(true)}>
                     <div className="cursor-pointer text-center bg-green-400 text-white rounded-sm w-[100px] p-1">see on map</div>
                 </div>
-                <Map location={row.getValue("location")} open={open} setOpen={setOpen}></Map>
+                <Map location={row.getValue("location")} open={open} setOpen={setOpen} popupText={row.original.wardNumber}></Map>
 
             </>
         },

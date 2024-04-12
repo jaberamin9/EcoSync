@@ -12,11 +12,11 @@ export async function GET(req) {
         const logedInUser = await getDataFromToken(req);
 
         if (logedInUser.role === "STS Manager") {
-            const wce = await Landfill.find({ "capacity": { "$gt": 0 } }).select("-__v -manager");
+            const landfill = await Landfill.find({ "capacity": { "$gt": 0 } }).select("-__v -manager");
 
             return NextResponse.json({
                 success: true,
-                wce
+                data: landfill
             }, { status: 200 })
         }
 
@@ -29,7 +29,7 @@ export async function GET(req) {
 
         return NextResponse.json({
             success: true,
-            landfill
+            data: landfill
         }, { status: 200 })
     } catch (error) {
         return NextResponse.json({ success: false, error: error.message }, { status: 500 })
@@ -65,10 +65,6 @@ export async function POST(req) {
         })
 
         const savedLandfill = await newLandfill.save()
-
-        // const margeData = await Landfill.
-        //     findOne({ _id: savedLandfill._id })
-        //     .select("-__v").populate({ path: 'manager', select: '_id username email role', model: User }).exec();
 
         return NextResponse.json({
             success: true,

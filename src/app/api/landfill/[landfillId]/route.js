@@ -12,15 +12,15 @@ export async function PUT(req, context) {
     try {
         const logedInUser = await getDataFromToken(req);
 
-        if (logedInUser.role == "Landfill Manager") {
+        if (logedInUser.role == "STS Manager") {
             const { capacity } = await req.json()
 
-            console.log(capacity, typeof (capacity))
             if (!mongoose.Types.ObjectId.isValid(context.params.landfillId)) return NextResponse.json({ success: false, error: "Landfill not exists" }, { status: 400 })
-
-            const updateLandfill = await Landfill.findOneAndUpdate({ _id: context.params.landfillId }, { capacity }, { returnDocument: "after" })
-
-            if (!updateLandfill) return NextResponse.json({ success: false, error: "Landfill not exists" }, { status: 400 })
+            const currentCapacity = await Landfill.findOne({ _id: context.params.landfillId })
+            if ((currentCapacity.capacity - capacity) < 0) {
+                return NextResponse.json({ success: false, error: "not enough space" }, { status: 400 })
+            }
+            const updateLandfill = await Landfill.findOneAndUpdate({ _id: context.params.landfillId }, { $set: { capacity: (currentCapacity.capacity - capacity) } }, { returnDocument: "after" })
 
             return NextResponse.json({
                 success: true,
@@ -41,10 +41,6 @@ export async function PUT(req, context) {
         const updateLandfill = await Landfill.findOneAndUpdate({ _id: context.params.landfillId }, reqBody, { returnDocument: "after" })
 
         if (!updateLandfill) return NextResponse.json({ success: false, error: "Landfill not exists" }, { status: 400 })
-
-        // const margeData = await Landfill.
-        //     findOne({ _id: updateLandfill._id })
-        //     .select("-__v").populate({ path: 'manager', select: '_id username email role', model: User }).exec();
 
 
         return NextResponse.json({

@@ -1,9 +1,7 @@
 "use client"
 
-import { ColumnDef } from "@tanstack/react-table"
 import { MoreHorizontal, ArrowUpDown } from "lucide-react"
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
@@ -14,20 +12,10 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useToast } from "@/components/ui/use-toast";
-import { AddViewDialog } from "@/components/add-view-dialog";
 import { useState } from "react";
-import { BillAndSlip } from "@/components/bill-and-slip";
 import Map from "@/components/map";
-import LandfillOperation from "./page";
-import { LandfillOperationDialog } from "@/components/landfill-operation-dialog";
-import { StsOperationDialog } from "@/components/sts-operation-dialog";
 import { StsOperationDialog2 } from "@/components/sts-operation-dialog2";
 
-async function getBill(id) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/wde/${id}/bill`, {
-        method: 'GET'
-    }).then(data => data.json())
-}
 
 function formatDate(dateVal) {
     var newDate = new Date(dateVal);
@@ -46,13 +34,15 @@ function formatDate(dateVal) {
         sHour = "12";
     }
     sHour = padValue(sHour);
-    const date = sMonth + "/" + sDay + "/" + sYear
+    const date = sDay + "/" + sMonth + "/" + sYear
     const time = sHour + ":" + sMinute + " " + sAMPM
     return [date, time];
 }
 function padValue(value) {
     return (value < 10) ? "0" + value : value;
 }
+
+
 
 export const columns = [
     {
@@ -181,7 +171,7 @@ export const columns = [
                 <div className="flex justify-center" onClick={() => setOpen(true)}>
                     <div className="cursor-pointer text-center bg-green-400 text-white rounded-sm w-[100px] p-1">see on map</div>
                 </div>
-                <Map location={row.getValue("location")} open={open} setOpen={setOpen}></Map>
+                <Map location={row.getValue("location")} open={open} setOpen={setOpen} popupText={row.original.landfillName}></Map>
 
             </>
         },
@@ -192,25 +182,24 @@ export const columns = [
             const queryClient = useQueryClient();
             const { toast } = useToast()
             const [open, setOpen] = useState(false);
-            const [biiDialog, setBiiDialog] = useState(false);
-            const landfill = row.original
+            const rowData = row.original
 
-            const [data, setData] = useState()
-            const handleSubmit = async () => {
-                const res = await getBill(landfill.id);
-                if (res.success) {
-                    setData(res.data)
-                    setBiiDialog(true)
-                }
-            }
 
             const mutation = useMutation({
                 mutationFn: async (id) => {
-                    await fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/wce/${id}`, {
-                        method: 'DELETE'
-                    }).then(data => data.json())
+                    await fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/landfill/${rowData.landfill_id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ capacity: -rowData.volumeCollection })
+                    }).then(async data => {
+                        return await fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/wce/${id}`, {
+                            method: 'DELETE'
+                        }).then(data => data.json())
+                    })
                 },
-                onSuccess: () => {
+                onSuccess: (data) => {
                     queryClient.invalidateQueries({ queryKey: ['wcemeneger'] })
                     toast({ title: "STS deleted" })
                 },
@@ -237,13 +226,13 @@ export const columns = [
                             <DropdownMenuItem onClick={() => setOpen(true)}>Update</DropdownMenuItem>
                             <DropdownMenuItem
                                 className='text-red-400 hover:text-red-400 focus:text-red-400'
-                                onClick={() => { mutation.mutate(landfill.id) }}
+                                onClick={() => { mutation.mutate(rowData.id) }}
                             >
                                 Delete
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <StsOperationDialog2 open={open} setOpen={setOpen} data={landfill}></StsOperationDialog2>
+                    <StsOperationDialog2 open={open} setOpen={setOpen} data={rowData}></StsOperationDialog2>
                 </>
             )
         },

@@ -173,7 +173,7 @@ export function DataTable({
                 </Button>
             </div>
             {setUserId(table.getFilteredSelectedRowModel()?.flatRows[0]?.original?.id)}
-            <UserOperationDialog open={open} setOpen={setOpen} data={""} add={true}></UserOperationDialog> :
+            <UserOperationDialog open={open} setOpen={setOpen} data={""} add={true}></UserOperationDialog>
         </div >
     )
 }

@@ -19,14 +19,21 @@ export default function LandfillOperation() {
             return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/landfill`, {
                 method: 'GET'
             }).then(data => data.json()).then(data => {
-                const newData = data.landfill.map(item => {
+                const newData = data.data.map(item => {
                     return {
                         id: item._id,
                         landfillName: item.landfillName,
                         operationalTimespan: item.operationalTimespan,
                         capacity: item.capacity,
                         location: [item.latitude, item.longitude],
-                        manager: item.manager.map(manager => manager.email),
+                        manager: item.manager.map((items, idx) => {
+                            if ((item.manager.length - 1) == idx) {
+                                return items.email
+                            } else {
+                                return items.email + ", "
+                            }
+                        }),
+                        manager_id: item.manager.map(manager => manager._id),
                     }
                 })
                 return newData

@@ -1,27 +1,30 @@
-Bug list:
+Team Name: RANDOMTHREE
+Institution Name: International Islamic University Chittagong (IIUC)
 
-Bug-1:
-URL: http://localhost:8000/api/wce
-Method: GET
-Error: Dashboard shows capacity error when STS manager enters.
-Fixed?: Yes
-Solution: Handle null values for stsId and vehicleId. This is the main issue.
+Participant 1:
+Name: Jaber Amin
+Email: jaberamin9@gmail.com
 
-Bug-2:
-Description: Landfill capacity displays negative value.
-Fixed?: Yes
-Solution: Implement add, delete, and update functionalities for capacity field.
+Participant 2:
+Name: Sarawar Hossain
+Email: sarawarhossain13@gmail.com
 
-Task-1:
-Description: Fix UI for single and multi spinners.
-Solution: fixed
+Participant 3:
+Name: Mohammad Nayemul Islam
+Email: nayem1010s@gmail.com
 
-Task-2:
-Description: Increase reusability of components wherever possible.
 
-Task-3:
-Description: Implement route selection.
-Complete: Yes
+how to run:
 
-Task-4:
-Description: reset password when user loged in.
+1. npm install next
+2. npm run dev
+3. email :admin@gmail.com
+   pass  :admin
+
+for otp:
+
+https://mailtrap.io/
+
+use this google account
+email: code37969@gmail.com
+pass: code(12)

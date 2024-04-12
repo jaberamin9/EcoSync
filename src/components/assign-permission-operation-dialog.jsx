@@ -1,24 +1,17 @@
 "use client"
-import { Copy, Loader2 } from "lucide-react"
-
+import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
-    DialogClose,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useEffect, useState } from "react"
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import MultiSelectDropdown2 from "./MultiSelectDropdown2"
+import { useQueryClient } from "@tanstack/react-query";
 import MultiSelectDropdown from "./MultiSelectDropdown"
-import MultiSelectDropdown3 from "./MultiSelectDropdown3"
 
 
 
@@ -46,7 +39,7 @@ export function AssignPermissionsOperationDialog({ open, setOpen, data, add = fa
     const [permissionSelectedList, setPermissionSelectedList] = useState([])
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
-
+    const [open1, setOpen1] = useState(false)
 
     const [loadings, setLoadings] = useState(true);
     const [stsList, setStsList] = useState([])
@@ -77,13 +70,13 @@ export function AssignPermissionsOperationDialog({ open, setOpen, data, add = fa
         async function fetchData() {
             let res = await getPermissions();
             if (res.success) {
-                const newData = res.permission.map(item => {
+                const data = res.permission.map(item => {
                     return {
-                        id: item._id,
-                        value: item.permissionsName,
+                        value: item._id,
+                        label: item.permissionsName,
                     }
                 })
-                setStsList(newData)
+                setStsList(data)
                 setLoadings(false)
             }
         }
@@ -99,11 +92,14 @@ export function AssignPermissionsOperationDialog({ open, setOpen, data, add = fa
 
                 <div className="grid w-[300px] max-w-sm items-center gap-1.5">
                     <Label htmlFor="disposed">Select Permission</Label>
-                    <MultiSelectDropdown3
-                        formFieldName={"assignpermissions"}
-                        options={stsList}
-                        onChange={val => { setPermissionSelectedList(val) }}>
-                    </MultiSelectDropdown3>
+                    <MultiSelectDropdown
+                        open={open1}
+                        setOpen={setOpen1}
+                        value={permissionSelectedList}
+                        setValue={setPermissionSelectedList}
+                        data={stsList}
+                        selectName="select permission">
+                    </MultiSelectDropdown>
                 </div>
                 {error != "" ? <p className="text-[11px] w-[300px] bg-red-100 p-1 rounded-md text-center">{error}</p> : ""}
 

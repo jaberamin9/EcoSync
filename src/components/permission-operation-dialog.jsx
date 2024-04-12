@@ -1,22 +1,19 @@
 "use client"
-import { Copy, Loader2 } from "lucide-react"
-
+import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
-    DialogClose,
     DialogContent,
     DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useEffect, useState } from "react"
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import MultiSelectDropdown2 from "./MultiSelectDropdown2"
+import { useState } from "react"
+import { useQueryClient } from "@tanstack/react-query";
+import MultiSelectDropdown from "./MultiSelectDropdown"
 
 
 
@@ -47,10 +44,17 @@ export function PermissionsOperationDialog({ open, setOpen, data, add = false })
     const [permissionSelectedList, setPermissionSelectedList] = useState([])
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
+    const [open1, setOpen1] = useState(false)
+
 
     const queryClient = useQueryClient();
 
-    const permisionList = ["read", "write", "update", "delete"]
+    const permisionList = [
+        { value: "read", label: "Read" },
+        { value: "write", label: "Write" },
+        { value: "update", label: "Update" },
+        { value: "delete", label: "Delete" },
+    ]
 
 
     const handleSubmit = async () => {
@@ -97,11 +101,14 @@ export function PermissionsOperationDialog({ open, setOpen, data, add = false })
                 </div>
                 <div className="grid w-auto max-w-sm items-center gap-1.5">
                     <Label htmlFor="disposed">Select Permission</Label>
-                    <MultiSelectDropdown2
-                        formFieldName={"permissions"}
-                        options={permisionList}
-                        onChange={val => { setPermissionSelectedList(val) }}>
-                    </MultiSelectDropdown2>
+                    <MultiSelectDropdown
+                        open={open1}
+                        setOpen={setOpen1}
+                        value={permissionSelectedList}
+                        setValue={setPermissionSelectedList}
+                        data={permisionList}
+                        selectName="select permission">
+                    </MultiSelectDropdown>
                 </div>
                 {error != "" ? <p className="text-[11px] w-[300px] bg-red-100 p-1 rounded-md text-center">{error}</p> : ""}
 
