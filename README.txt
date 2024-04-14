@@ -32,9 +32,6 @@ Solution: Calculate the cost per kilometer based on load:
 Complete: Yes
 
 Task-4:
-Description: reset password when user loged in.
-
-Task-5:
 Description: The system should assist finding the required number of trucks to transfer 
              maximum possible waste from the STS to the Landfill. The following parameters can be
              taken into consideration:
@@ -42,6 +39,10 @@ Description: The system should assist finding the required number of trucks to t
                ○ Trucks should be chosen to first ensure minimum fuel consumption cost,
                  second to ensure minimum number of trucks.
 Solution: Calculate the average of fuelCostLoaded and trackCapacity (fuelCostLoaded/trackCapacity), then sort them (knapsack)
+Complete: No
+
+Task-5:
+Description: reset password when user loged in.
 
 Task-6:
 Description: Increase reusability of components wherever possible.
