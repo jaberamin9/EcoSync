@@ -148,9 +148,6 @@ export function StsOperationDialog({ open, setOpen, data, add = false }) {
                         <Label htmlFor="disposed">Location</Label>
                         <div className="flex gap-2">
                             <Input disabled value={location} className="h-9" type="text" placeholder="location" />
-                            {/* <Button className='h-9'>
-                                <a href="https://www.google.com/maps/@23.7953844,90.9511541,7.25z?entry=ttu" target="_blank">Get Location</a>
-                            </Button> */}
                         </div>
                     </div>
 

@@ -41,6 +41,7 @@ Description: The system should assist finding the required number of trucks to t
                ○ Each truck can have at most 3 trips.
                ○ Trucks should be chosen to first ensure minimum fuel consumption cost,
                  second to ensure minimum number of trucks.
+Solution: Calculate the average of fuelCostLoaded and trackCapacity (fuelCostLoaded/trackCapacity), then sort them (knapsack)
 
 Task-6:
 Description: Increase reusability of components wherever possible.

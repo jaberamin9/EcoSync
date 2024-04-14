@@ -159,18 +159,15 @@ export function StsOperationDialog2({ open, setOpen, data, add = false }) {
     }
 
     useEffect(() => {
-        async function fetchData3() {
-            let res = await getStsID();
-            if (res.success) {
-                (data) ? '' : setStsLocation([res.sts.latitude, res.sts.longitude])
-                setPopupText(res.sts.wardNumber)
-                setStsID(res.sts._id)
-            }
-        }
         async function fetchData() {
             let res = await getVehicles();
             if (res.success) {
-                const data = res.vehicles.map(item => {
+                let data = res.vehicles.sort(function (item1, item2) {
+                    const costPerKilometer1 = (item1.fuelcostUnloaded + (volume / item1.capacity) * (item1.fuelcostLoaded - item1.fuelcostUnloaded))
+                    const costPerKilometer2 = (item2.fuelcostUnloaded + (volume / item2.capacity) * (item2.fuelcostLoaded - item2.fuelcostUnloaded))
+                    return costPerKilometer1 - costPerKilometer2
+                })
+                data = data.map(item => {
                     return {
                         value: item._id,
                         label: item.type + " = " + item.capacity + "T"
@@ -186,6 +183,19 @@ export function StsOperationDialog2({ open, setOpen, data, add = false }) {
                 setLoadings(false)
             }
         }
+        fetchData()
+    }, [volume])
+
+    useEffect(() => {
+        async function fetchData3() {
+            let res = await getStsID();
+            if (res.success) {
+                (data) ? '' : setStsLocation([res.sts.latitude, res.sts.longitude])
+                setPopupText(res.sts.wardNumber)
+                setStsID(res.sts._id)
+            }
+        }
+
         async function fetchData2() {
             let res = await getLandfill();
             if (res.success) {
@@ -208,11 +218,9 @@ export function StsOperationDialog2({ open, setOpen, data, add = false }) {
             }
         }
         fetchData3()
-        fetchData()
         fetchData2()
     }, []);
 
-    console.log(mapLoading)
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="flex gap-4 flex-wrap md:flex-nowrap">
