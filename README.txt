@@ -39,6 +39,11 @@ Description: The system should assist finding the required number of trucks to t
                ○ Trucks should be chosen to first ensure minimum fuel consumption cost,
                  second to ensure minimum number of trucks.
 Solution: Calculate the average of fuelCostLoaded and trackCapacity (fuelCostLoaded/trackCapacity), then sort them (knapsack)
+Example: Total waste = 37
+         Fuel Cost Loaded = 3 , 9 , 2 , 7 , 4 , 8 , 10 , 11 , 8 , 14 , 6 , 1
+         Track capacity = 5 , 7 , 3 , 15 , 5 , 7 , 3 , 15 , 5 , 7 , 3 , 15
+         average = 0.6 , 1.2 , 0.6 , 0.46 , 0.8 , 1.14 , 3.3 , 0.73 , 2.6 , 2 , 2 , 0.06
+         sort: 0.06 , 0.46 , 0.6 , 0.6 , 0.73 , 0.8 , 1.14 , 1.2 , 2 , 2 , 2.6 , 3.3
 Complete: No
 
 Task-5:
