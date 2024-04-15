@@ -2,13 +2,17 @@ import { NextResponse } from "next/server";
 import { connect } from "@/dbConnection/dbConnection";
 import User from "@/models/user";
 import bcryptjs from "bcryptjs";
+import { getDataFromToken } from "@/utils/getDataFromToken";
+
 
 connect()
 
 export async function PUT(req) {
     try {
         const reqBody = await req.json()
-        const { email, oldPassword, newPassword } = reqBody;
+        const { oldPassword, newPassword } = reqBody;
+        const logedInUser = await getDataFromToken(req);
+        const email = logedInUser.email
 
         //check if user exists
         const user = await User.findOne({ email })
