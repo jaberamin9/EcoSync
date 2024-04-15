@@ -274,7 +274,7 @@ export function StsOperationDialog2({ open, setOpen, data, add = false }) {
                     </div>
 
                     <div className="grid w-auto max-w-sm items-center gap-1.5">
-                        <RadioGroup defaultValue="comfortable" className='flex gap-2 mb-1' >
+                        <RadioGroup defaultValue="Single Vehicle" className='flex gap-2 mb-1' >
                             <div className="flex items-center space-x-2">
                                 <RadioGroupItem value="Single Vehicle" id="r1" onClick={e => setIsSingleVehicle(true)} />
                                 <Label htmlFor="r1">Single Vehicle</Label>
