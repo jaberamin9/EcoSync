@@ -19,7 +19,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Icon } from "@iconify/react"
 import SelectDropdown from "./SelectDropdown"
 import LeafLetMapRouting from "./LeafLetMapRouting"
-import { Checkbox } from "@/components/ui/checkbox"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 
 async function updateWce(credentials, id) {
@@ -82,6 +82,8 @@ export function StsOperationDialog2({ open, setOpen, data, add = false }) {
     const [popupText, setPopupText] = useState("");
     const [landfillName, setLandfillName] = useState("");
     const [shortestRoute, setShortestRoute] = useState(false);
+    const [isSingleVehicle, setIsSingleVehicle] = useState(true);
+
 
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
@@ -221,6 +223,7 @@ export function StsOperationDialog2({ open, setOpen, data, add = false }) {
         fetchData2()
     }, []);
 
+
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="flex gap-4 flex-wrap md:flex-nowrap">
@@ -271,15 +274,30 @@ export function StsOperationDialog2({ open, setOpen, data, add = false }) {
                     </div>
 
                     <div className="grid w-auto max-w-sm items-center gap-1.5">
+                        <RadioGroup defaultValue="comfortable" className='flex gap-2 mb-1' >
+                            <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="Single Vehicle" id="r1" onClick={e => setIsSingleVehicle(true)} />
+                                <Label htmlFor="r1">Single Vehicle</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <RadioGroupItem value="Vehicle Fleet" id="r2" onClick={e => setIsSingleVehicle(false)} />
+                                <Label htmlFor="r2">Vehicle Fleet</Label>
+                            </div>
+                        </RadioGroup>
+
                         <Label htmlFor="disposed">Select Vehicles</Label>
-                        <SelectDropdownWce
-                            open={open1}
-                            setOpen={setOpen1}
-                            value={vehiclesSelected}
-                            setValue={setVehiclesSelected}
-                            data={vehiclesSelect}
-                            selectName="select vehicles">
-                        </SelectDropdownWce>
+                        {isSingleVehicle ?
+                            <SelectDropdownWce
+                                open={open1}
+                                setOpen={setOpen1}
+                                value={vehiclesSelected}
+                                setValue={setVehiclesSelected}
+                                data={vehiclesSelect}
+                                selectName="select vehicles">
+                            </SelectDropdownWce>
+                            : <div className="p-2 rounded-md bg-blue-100 text-black text-sm">Not implemented yet (task: 4)</div>
+                        }
+
                     </div>
 
                     <div className="grid w-auto max-w-sm items-center gap-1.5">
