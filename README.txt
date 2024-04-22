@@ -52,6 +52,7 @@ Complete: Yes
 
 Task-5:
 Description: reset password when user loged in.
+Complete: Yes
 
 Task-6:
 Description: Increase reusability of components wherever possible.

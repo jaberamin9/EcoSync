@@ -1,10 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-
 import Link from 'next/link';
 import { useSelectedLayoutSegment, useRouter } from 'next/navigation';
-
 import useScroll from '@/hooks/use-scroll';
 import { cn } from '@/lib/utils';
 import {
@@ -13,11 +11,11 @@ import {
     AvatarImage,
 } from "@/components/ui/avatar"
 import {
+    KeyRound,
     Loader2,
     LogOut,
     User,
 } from "lucide-react"
-
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -28,6 +26,9 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ProfileDialog } from './profile-dialog';
+import { ResetPasswordDialog } from './ResetPasswordDialog';
+
+
 
 async function logout() {
     return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/auth/logout`, {
@@ -43,6 +44,8 @@ const Header = () => {
     const router = useRouter();
     const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false);
+    const [open2, setOpen2] = useState(false);
+
 
     const handleSubmit = async e => {
         setLoading(true)
@@ -95,7 +98,10 @@ const Header = () => {
                                     <User className="mr-2 h-4 w-4" />
                                     <span>Profile</span>
                                 </DropdownMenuItem>
-
+                                <DropdownMenuItem onClick={() => setOpen2(true)}>
+                                    <KeyRound className="mr-2 h-4 w-4" />
+                                    <span>Reset password</span>
+                                </DropdownMenuItem>
                             </DropdownMenuGroup>
 
                             <DropdownMenuSeparator />
@@ -107,6 +113,7 @@ const Header = () => {
                         </DropdownMenuContent>
                     </DropdownMenu>
                     <ProfileDialog open={open} setOpen={setOpen}></ProfileDialog>
+                    <ResetPasswordDialog open={open2} setOpen={setOpen2}></ResetPasswordDialog>
                 </div>
             </div>
         </div>
