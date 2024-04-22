@@ -38,7 +38,7 @@ Description: The system should assist finding the required number of trucks to t
                ○ Each truck can have at most 3 trips.
                ○ Trucks should be chosen to first ensure minimum fuel consumption cost,
                  second to ensure minimum number of trucks.
-Solution: Calculate the average of fuelCostLoaded and trackCapacity (fuelCostLoaded/trackCapacity), then sort them (knapsack)
+Solution: Calculate the average of fuelCostLoaded and trackCapacity (fuelCostLoaded/trackCapacity), then sort them
 Example: Total waste = 37
          Fuel Cost Unloaded = 1 , 1 , 1 , 1 , 1 , 1 , 2 , 2 , 2 , 2 , 2 , 1
          Fuel Cost Loaded = 3 , 9 , 2 , 7 , 4 , 8 , 10 , 11 , 8 , 14 , 6 , 1
