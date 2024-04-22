@@ -2,7 +2,6 @@
 import "@/app/globals.css";
 import { columns } from "./columns"
 import { DataTable } from "@/app/ui/dashboard/rbac/permissions/data-permissions-role-with-add"
-import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";

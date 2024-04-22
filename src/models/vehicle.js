@@ -24,6 +24,10 @@ const vehicleSchema = new mongoose.Schema({
         required: true
         //Fuel cost per kilo meter - unloaded
     },
+    isFree: {
+        type: Boolean,
+        default: true
+    },
     stsId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,

@@ -41,13 +41,14 @@ async function addePermissions(credentials) {
 
 export function PermissionsOperationDialog({ open, setOpen, data, add = false }) {
     const [permissionsName, setPermissionsName] = useState(add ? "" : (data) ? data.permissionsName : "")
-    const [permissionSelectedList, setPermissionSelectedList] = useState([])
+    const [permissionSelectedList, setPermissionSelectedList] = useState(add ? [] : (data) ? data.permissionsValue.map((item) => item?.split(/\s*,\s*/)[0]) : [])
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
     const [open1, setOpen1] = useState(false)
 
 
     const queryClient = useQueryClient();
+
 
     const permisionList = [
         { value: "read", label: "Read" },

@@ -1,12 +1,7 @@
 "use client"
 
-
 import * as React from "react"
 import {
-    ColumnDef,
-    ColumnFiltersState,
-    SortingState,
-    VisibilityState,
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
@@ -14,7 +9,6 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table"
-
 import {
     Table,
     TableBody,
@@ -29,15 +23,9 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { AddViewDialog } from '@/components/add-view-dialog'
-import { LandfillOperationDialog } from "@/components/landfill-operation-dialog"
 import { StsOperationDialog } from "@/components/sts-operation-dialog"
-import { VehiclesOperationDialog } from "@/components/vehicles-operation-dialog"
-import { RbacOperationDialog } from "@/components/rbac-operation-dialog"
-import { PermissionsOperationDialog } from "@/components/permission-operation-dialog"
 
 
 export function DataTable({

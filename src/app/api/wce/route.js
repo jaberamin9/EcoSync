@@ -123,39 +123,45 @@ export async function POST(req) {
 
         const reqBody = await req.json()
         const { stsId, vehicleId, landfillId, volumeCollection, arrivalTime, departureTime, totlaKiloMeter } = reqBody
+        const isInsertMany = reqBody.insertMany || false
 
-        //check if user already exists
-        // const isWceExists = await Wce.findOne({ stsId })
-
-        // if (isWceExists) {
-        //     return NextResponse.json({ success: false, error: "WCE already exists" }, { status: 400 })
-        // }
-        // const duplicateValue = Wce.aggregate(
-        //     { $group: { _id: "$vehicleId", total: { $sum: 1 } } },
-        //     { $match: { total: { $gte: 2 } } },
-        //     { $sort: { total: -1 } },
-        //     { $limit: 5 }
-        // );
-
-
-        const newWce = new Wce({
-            stsId,
-            vehicleId,
-            landfillId,
-            volumeCollection,
-            arrivalTime,
-            departureTime,
-            totlaKiloMeter
-        })
-
-        const savedWce = await newWce.save()
-
-
-        return NextResponse.json({
-            success: true,
-            message: "WCE add successfully",
-            data: savedWce
-        }, { status: 201 })
+        if (isInsertMany) {
+            let data = []
+            vehicleId.forEach(element => {
+                let newWce = {
+                    stsId,
+                    vehicleId: element.id,
+                    landfillId,
+                    volumeCollection: element.wasteCollect,
+                    arrivalTime,
+                    departureTime,
+                    totlaKiloMeter
+                }
+                data.push(newWce)
+            });
+            const result = await Wce.insertMany(data);
+            return NextResponse.json({
+                success: true,
+                message: "WCE add successfully",
+                data: result
+            }, { status: 201 })
+        } else {
+            let newWce = new Wce({
+                stsId,
+                vehicleId,
+                landfillId,
+                volumeCollection,
+                arrivalTime,
+                departureTime,
+                totlaKiloMeter
+            })
+            const savedWce = await newWce.save()
+            return NextResponse.json({
+                success: true,
+                message: "WCE add successfully",
+                data: savedWce
+            }, { status: 201 })
+        }
     } catch (error) {
         return NextResponse.json({ success: false, error: error.message }, { status: 500 })
     }

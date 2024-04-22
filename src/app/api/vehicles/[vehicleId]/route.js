@@ -10,7 +10,18 @@ export async function PUT(req, context) {
     try {
         const logedInUser = await getDataFromToken(req);
         if (logedInUser.role != "System Admin") {
-            return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
+            const { isFree } = await req.json()
+
+            if (!mongoose.Types.ObjectId.isValid(context.params.vehicleId)) return NextResponse.json({ success: false, error: "Vehicle not exists" }, { status: 400 })
+
+            const vehicle = await Vehicle.findOneAndUpdate({ _id: context.params.vehicleId }, { isFree }, { returnDocument: "after" })
+
+            if (!vehicle) return NextResponse.json({ success: false, error: "Vehicle not exists" }, { status: 400 })
+            return NextResponse.json({
+                success: true,
+                message: "Vehicle update successfully",
+                data: vehicle
+            }, { status: 200 })
         }
 
         const reqBody = await req.json()

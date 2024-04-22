@@ -8,7 +8,7 @@ import 'leaflet-routing-machine';
 
 function LeafLetMapRouting({ latlng, setMapLoading, alllandfillLocation, setLandfillSelected, setShortestRoute, shortestRoute, popupText, setDistance, setTime, setLandfillName, isClickAble = true }) {
 
-    const [position, setPosition] = useState(latlng ? extractLatLon(String(latlng)) : null);
+    const [position, setPosition] = useState(latlng ? extractLatLon(String(latlng)) : { lat: 32.3, lng: 23.23 });
     const [routingControl, setRoutingControl] = useState("");
     const [shortestRouteControl, setShortestRouteControl] = useState([]);
 
@@ -39,7 +39,7 @@ function LeafLetMapRouting({ latlng, setMapLoading, alllandfillLocation, setLand
                 return new Promise(resolve => {
                     L.Routing.control({
                         waypoints: [
-                            L.latLng(position.lat, position.lng),
+                            L.latLng(position?.lat, position?.lng),
                             destinationPoint
                         ],
                         routeWhileDragging: true,
@@ -80,7 +80,7 @@ function LeafLetMapRouting({ latlng, setMapLoading, alllandfillLocation, setLand
                     if (map) {
                         const control = L.Routing.control({
                             waypoints: [
-                                L.latLng(position.lat, position.lng),
+                                L.latLng(position?.lat, position?.lng),
                                 shortestRoute.waypoints[1].latLng,
                             ],
                             createMarker: function () { return null },
@@ -102,8 +102,8 @@ function LeafLetMapRouting({ latlng, setMapLoading, alllandfillLocation, setLand
 
                         const searchValue = shortestRoute.coordinates[shortestRoute.coordinates.length - 1]
                         const foundValue = alllandfillLocation.find(item => {
-                            return isEqualWithTolerance(item.location[0], searchValue.lat, 0.01)
-                                && isEqualWithTolerance(item.location[1], searchValue.lng, 0.01)
+                            return isEqualWithTolerance(item.location[0], searchValue?.lat, 0.01)
+                                && isEqualWithTolerance(item.location[1], searchValue?.lng, 0.01)
                         })
 
                         setLandfillName(foundValue.label)
@@ -119,9 +119,9 @@ function LeafLetMapRouting({ latlng, setMapLoading, alllandfillLocation, setLand
 
         return alllandfillLocation ? (
             <div>
-                {alllandfillLocation.map(item => {
-                    const lat = item.location[0]
-                    const lng = item.location[1]
+                {alllandfillLocation?.map(item => {
+                    const lat = item?.location[0]
+                    const lng = item?.location[1]
                     return <Marker key={item.value} position={{ lat, lng }} icon={customIcon} eventHandlers={{
                         click: () => {
                             setMapLoading(true)
@@ -137,7 +137,7 @@ function LeafLetMapRouting({ latlng, setMapLoading, alllandfillLocation, setLand
                             if (map) {
                                 const control = L.Routing.control({
                                     waypoints: [
-                                        L.latLng(position.lat, position.lng),
+                                        L.latLng(position?.lat, position?.lng),
                                         L.latLng(lat, lng),
                                     ],
                                     createMarker: function () { return null },
