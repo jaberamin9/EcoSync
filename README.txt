@@ -48,7 +48,7 @@ Example: Total waste = 37
          w = 15 + 15 + 5 + 2(3-1) = 37
          c = 1 + 7 + 3 + 1.67 [1+(2/3)*(2-1)]
            = 12.67 
-Complete: No
+Complete: Yes
 
 Task-5:
 Description: reset password when user loged in.
