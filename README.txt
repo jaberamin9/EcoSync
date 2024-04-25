@@ -1,3 +1,11 @@
+EcoSync:
+Dhaka faces waste management challenges. DNCC aims to improve with EcoSync, a web app for efficient waste collection, transportation, and processing. It will serve as a central hub for System Admins, Landfill Managers, and STS Managers to streamline operations and enhance accountability.
+EcoSync is a web app for DNCC's waste management. It offers features like user management, data entry for facilities and vehicles, billing with fuel cost calculation, route optimization based on traffic, fleet optimization for minimum cost, and real-time dashboard statistics.
+
+1. Aiming to address waste management challenges in urban areas, EcoSync, a web application, is introduced by the local municipal authority.
+2.EcoSync offers a range of features including user management, route optimization, billing, and real-time dashboard statistics to improve waste collection, transportation, and processing efficiency in the city.
+
+
 Bug list:
 
 Bug-1:
