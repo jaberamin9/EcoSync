@@ -41,13 +41,13 @@ export default function LandfillOperation() {
 
         return (
             <>
-                <span className="font-bold text-4xl">Vehicles Operation</span>
-                <div className="overflow-x-auto" style={{ height: "calc(100vh - 120px)" }}>
+                <span className="font-bold text-2xl">Vehicles Operation</span>
+                <div className="">
                     {isLoading ?
                         <div className="w-full h-full flex justify-center items-center">
-                            <Loader2 className="ml-2 h-10 w-10 animate-spin" />
+                            <Loader2 className="ml-2 h-[80vh] w-10 animate-spin" />
                         </div>
-                        : <div className="p-8">
+                        : <div className="mt-4 px-8 bg-white rounded-md shadow py-4">
                             <DataTable columns={columns} data={data} />
                         </div>
                     }

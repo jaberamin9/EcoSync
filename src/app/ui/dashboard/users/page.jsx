@@ -105,14 +105,14 @@ export default function LandfillOperation() {
         console.log(data)
         return (
             <>
-                <span className="font-bold text-4xl">User Operation</span>
-                <div className="overflow-x-auto" style={{ height: "calc(100vh - 120px)" }}>
+                <span className="font-bold text-2xl">User Operation</span>
+                <div className="">
                     {isLoading ?
-                        <div className="w-full h-full flex justify-center items-center">
+                        <div className="w-full h-[80vh] flex justify-center items-center">
                             <Loader2 className="ml-2 h-10 w-10 animate-spin" />
                         </div>
-                        : <div className="p-8 flex flex-col lg:flex-row gap-4 w-full">
-                            <div className='flex-1'>
+                        : <div className="flex flex-col lg:flex-row gap-4 w-full">
+                            <div className='flex-1 mt-4 px-8 bg-white rounded-md shadow py-4'>
                                 <DataTable columns={columns} data={data} setUserId={setUserId} />
                             </div>
                             <Card className="w-[350px] mt-4 h-fit">

@@ -52,12 +52,17 @@ export function DataTable({
             sorting,
             columnFilters,
             columnVisibility,
+        },
+        initialState: {
+            pagination: {
+                pageSize: 5,
+            },
         }
     })
 
 
     return (
-        <div>
+        <div className="overflow-auto p-1">
             <div className="flex items-center py-4 gap-3">
                 <Input
                     placeholder='Search here...'

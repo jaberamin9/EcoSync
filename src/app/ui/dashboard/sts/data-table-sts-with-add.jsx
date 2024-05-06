@@ -50,6 +50,11 @@ export function DataTable({
             sorting,
             columnFilters,
             columnVisibility,
+        },
+        initialState: {
+            pagination: {
+                pageSize: 5,
+            },
         }
     })
 
