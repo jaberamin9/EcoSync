@@ -2,7 +2,6 @@
 import "@/app/globals.css";
 import { columns } from "./columns"
 import { DataTable } from "@/app/ui/dashboard/landfill/data-table-with-add"
-import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -16,10 +15,10 @@ export default function LandfillOperation() {
         router.push('/ui/dashboard');
     } else {
         const fetchWdeData = async () => {
-            return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/landfill`, {
+            return fetch(`/api/landfill`, {
                 method: 'GET'
             }).then(data => data.json()).then(data => {
-                const newData = data.data.map(item => {
+                const newData = data.data.reverse().map(item => {
                     return {
                         id: item._id,
                         landfillName: item.landfillName,

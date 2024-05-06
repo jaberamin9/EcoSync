@@ -3,7 +3,7 @@ import { connect } from "@/dbConnection/dbConnection";
 import Sts from "@/models/sts";
 import { NextRequest, NextResponse } from "next/server";
 var mongoose = require('mongoose');
-import { getDataFromToken } from "@/utils/getDataFromToken";
+import { getDataFromToken } from "@/utils/get-data-from-token";
 import User from "@/models/user";
 
 connect()

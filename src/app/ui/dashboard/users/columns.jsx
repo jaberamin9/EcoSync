@@ -1,9 +1,6 @@
 "use client"
-
-import { ColumnDef } from "@tanstack/react-table"
 import { MoreHorizontal, ArrowUpDown } from "lucide-react"
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
@@ -14,35 +11,15 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useToast } from "@/components/ui/use-toast";
-import { AddViewDialog } from "@/components/add-view-dialog";
 import { useState } from "react";
-import { BillAndSlip } from "@/components/bill-and-slip";
-import Map from "@/components/map";
-import LandfillOperation from "./page";
-import { LandfillOperationDialog } from "@/components/landfill-operation-dialog";
 import { UserOperationDialog } from "@/components/user-operation-dialog";
 import { Checkbox } from "@/components/ui/checkbox"
 
-async function getBill(id) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/wde/${id}/bill`, {
-        method: 'GET'
-    }).then(data => data.json())
-}
 
 
 export const columns = [
     {
         id: "select",
-        // header: ({ table }) => (
-        //     // <Checkbox
-        //     //     checked={
-        //     //         table.getIsAllPageRowsSelected() ||
-        //     //         (table.getIsSomePageRowsSelected() && "indeterminate")
-        //     //     }
-        //     //     onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        //     //     aria-label="Select all"
-        //     // />
-        // ),
         cell: ({ row, table }) => (
             <Checkbox
                 checked={row.getIsSelected()}
@@ -110,7 +87,7 @@ export const columns = [
     },
     {
         id: "actions",
-        cell: ({ row }) => {
+        cell: ({ row, table }) => {
             const queryClient = useQueryClient();
             const { toast } = useToast()
             const [open, setOpen] = useState(false);
@@ -118,12 +95,13 @@ export const columns = [
 
             const mutation = useMutation({
                 mutationFn: async (id) => {
-                    await fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/users/${id}`, {
+                    await fetch(`/api/users/${id}`, {
                         method: 'DELETE'
                     }).then(data => data.json())
                 },
                 onSuccess: () => {
                     queryClient.invalidateQueries({ queryKey: ['users'] })
+                    table.resetRowSelection()
                     toast({ title: "User deleted" })
                 },
                 onError: (err) => {

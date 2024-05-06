@@ -13,11 +13,11 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useEffect, useState } from "react"
 import { useQueryClient } from "@tanstack/react-query";
-import SelectDropdown from "./SelectDropdown"
+import SelectDropdown from "./select-dropdown"
 
 
 async function updateLandfill(credentials, id) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/vehicles/${id}`, {
+    return fetch(`/api/vehicles/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -27,7 +27,7 @@ async function updateLandfill(credentials, id) {
 }
 
 async function addeLandfill(credentials) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/vehicles`, {
+    return fetch(`/api/vehicles`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -37,7 +37,7 @@ async function addeLandfill(credentials) {
 }
 
 async function getSts() {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/sts`, {
+    return fetch(`/api/sts`, {
         method: 'GET'
     }).then(data => data.json())
 }
@@ -125,15 +125,12 @@ export function VehiclesOperationDialog({ open, setOpen, data, add = false }) {
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="sm:max-w-md w-auto">
                 <DialogHeader>
-                    <DialogTitle>{add ? "Add vehicle" : "Update"}</DialogTitle>
-                    <DialogDescription>
-                        Add vehicle
-                    </DialogDescription>
+                    <DialogTitle>{add ? "Add vehicle" : "Update vehicle"}</DialogTitle>
                 </DialogHeader>
 
                 <div className="grid w-auto max-w-sm items-center gap-1.5">
                     <Label htmlFor="disposed">Vehicle Id</Label>
-                    <Input onChange={e => setVehicleId(e.target.value)} value={vehicleId} className="w-[300px] h-9" type="text" placeholder="VehicleId" />
+                    <Input onChange={e => setVehicleId(e.target.value)} value={vehicleId} className="w-[300px] h-9" type="number" placeholder="VehicleId" />
                 </div>
 
                 <div className="grid w-[300px] max-w-sm items-center gap-1.5">
@@ -150,12 +147,12 @@ export function VehiclesOperationDialog({ open, setOpen, data, add = false }) {
 
                 <div className="grid w-auto max-w-sm items-center gap-1.5">
                     <Label htmlFor="disposed">Fuel cost loaded</Label>
-                    <Input onChange={e => setFuelcostLoaded(e.target.value)} value={fuelcostLoaded} className="w-[300px] h-9" type="text" placeholder="Fuel cost loaded" />
+                    <Input onChange={e => setFuelcostLoaded(e.target.value)} value={fuelcostLoaded} className="w-[300px] h-9" type="number" placeholder="Fuel cost loaded" />
                 </div>
 
                 <div className="grid w-auto max-w-sm items-center gap-1.5">
                     <Label htmlFor="disposed">Fuel cost Unloaded</Label>
-                    <Input onChange={e => setFuelCostUnloaded(e.target.value)} value={fuelcostUnloaded} className="w-[300px] h-9" type="text" placeholder="Fuel cost Unloaded" />
+                    <Input onChange={e => setFuelCostUnloaded(e.target.value)} value={fuelcostUnloaded} className="w-[300px] h-9" type="number" placeholder="Fuel cost Unloaded" />
                 </div>
 
                 <div className="grid w-[300px] max-w-sm items-center gap-1.5">
@@ -173,8 +170,8 @@ export function VehiclesOperationDialog({ open, setOpen, data, add = false }) {
                 {error != "" ? <p className="text-[11px] bg-red-100 p-1 rounded-md mx-6 text-center">{error}</p> : ""}
 
                 <DialogFooter className="sm:justify-end">
-                    <Button onClick={handleSubmit} type="submit" variant="secondary" disabled={loading}>
-                        Update
+                    <Button onClick={handleSubmit} type="submit" className='w-full' variant="custom" disabled={loading}>
+                        {add ? 'Add' : 'Update'}
                         {loading ? <Loader2 className="ml-2 h-4 w-4 animate-spin" /> : ""}
                     </Button>
                 </DialogFooter>

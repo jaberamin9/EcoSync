@@ -1,5 +1,5 @@
 import { connect } from "@/dbConnection/dbConnection";
-import { getDataFromToken } from "@/utils/getDataFromToken";
+import { getDataFromToken } from "@/utils/get-data-from-token";
 import Permissions from "@/models/permissions";
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";

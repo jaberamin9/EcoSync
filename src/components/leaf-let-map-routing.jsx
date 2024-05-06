@@ -1,6 +1,6 @@
 "use client"
-import React, { useEffect, useState } from 'react'
-import { MapContainer, TileLayer, useMap, Marker, Popup, useMapEvents } from 'react-leaflet'
+import React, { useState } from 'react'
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import { Icon } from 'leaflet';
 import L from 'leaflet';
@@ -19,7 +19,6 @@ function LeafLetMapRouting({ latlng, setMapLoading, alllandfillLocation, setLand
                 setPosition(isClickAble ? e.latlng : (latlng ? position : null));
             },
         });
-        //position ? map.flyTo(position, map.getZoom()) : ""
         const customIcon = new Icon({
             iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
             iconSize: [32, 32]
@@ -93,9 +92,6 @@ function LeafLetMapRouting({ latlng, setMapLoading, alllandfillLocation, setLand
                         const controlContainerParent = routingControlContainer.parentNode
                         controlContainerParent.removeChild(routingControlContainer)
                         setShortestRouteControl((pre) => [...pre, control])
-
-
-                        //const polyline = L.polyline(shortestRoute.coordinates).addTo(map);
 
                         setDistance((shortestRoute.summary.totalDistance / 1000).toFixed(2))
                         setTime(secondsToHhMm(shortestRoute.summary.totalTime))

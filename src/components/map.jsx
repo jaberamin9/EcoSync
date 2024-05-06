@@ -5,7 +5,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-import LeafLetMap from "./LeafLetMap";
+import LeafLetMap from "./leaf-let-map";
 
 
 export default function Map({ location, open, setOpen, popupText }) {

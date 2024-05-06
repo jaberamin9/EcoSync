@@ -1,10 +1,8 @@
 "use client"
 import "@/app/globals.css";
-import { Payment, columns } from "./columns"
+import { columns } from "./columns"
 import { DataTable } from "../arrived/data-table"
-import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -17,11 +15,11 @@ export default function DemoPage() {
         router.push('/ui/dashboard');
     } else {
         const fetchWdeData = async () => {
-            return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/wce`, {
+            return fetch(`/api/wce`, {
                 method: 'GET'
             }).then(data => data.json()).then(data => {
 
-                const newData = data.wce.map(item => {
+                const newData = data.wce.reverse().map(item => {
                     return {
                         id: item._id,
                         sts: item.stsId.wardNumber,

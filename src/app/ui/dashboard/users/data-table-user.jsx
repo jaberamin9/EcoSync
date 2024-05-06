@@ -8,7 +8,6 @@ import {
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table"
-
 import {
     Table,
     TableBody,
@@ -23,7 +22,6 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { UserOperationDialog } from "@/components/user-operation-dialog"
@@ -39,6 +37,7 @@ export function DataTable({
     const [columnVisibility, setColumnVisibility] = React.useState({})
     const [open, setOpen] = React.useState(false);
     const [rowSelection, setRowSelection] = React.useState({})
+    const [checked, setChecked] = React.useState('56ty')
 
     const table = useReactTable({
         data,
@@ -99,7 +98,7 @@ export function DataTable({
                             })}
                     </DropdownMenuContent>
                 </DropdownMenu>
-                <Button className="h-9" onClick={() => setOpen(true)}>Add</Button>
+                <Button className="h-9" variant="custom" onClick={() => setOpen(true)}>Add</Button>
             </div>
             <div className="rounded-md border">
                 <Table className='bg-white'>
@@ -126,8 +125,18 @@ export function DataTable({
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
-                                    className='h-1'
+                                    className='h-1 cursor-pointer'
                                     key={row.id}
+                                    onClick={() => {
+                                        if (checked == row.original.id) {
+                                            setChecked('56ty')
+                                            table.resetRowSelection()
+                                        } else {
+                                            setChecked(row.original.id)
+                                            table.resetRowSelection()
+                                            row.toggleSelected(true)
+                                        }
+                                    }}
                                     data-state={row.getIsSelected() && "selected"}
                                 >
                                     {row.getVisibleCells().map((cell) => (
@@ -172,7 +181,7 @@ export function DataTable({
                     Next
                 </Button>
             </div>
-            {setUserId(table.getFilteredSelectedRowModel()?.flatRows[0]?.original?.id)}
+            {setUserId(checked)}
             <UserOperationDialog open={open} setOpen={setOpen} data={""} add={true}></UserOperationDialog>
         </div >
     )

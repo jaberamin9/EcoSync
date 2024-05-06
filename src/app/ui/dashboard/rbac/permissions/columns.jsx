@@ -1,5 +1,4 @@
 "use client"
-
 import { MoreHorizontal, ArrowUpDown } from "lucide-react"
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button"
@@ -17,7 +16,7 @@ import { PermissionsOperationDialog } from "@/components/permission-operation-di
 
 
 async function getBill(id) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/wde/${id}/bill`, {
+    return fetch(`/api/wde/${id}/bill`, {
         method: 'GET'
     }).then(data => data.json())
 }
@@ -80,7 +79,7 @@ export const columns = [
 
             const mutation = useMutation({
                 mutationFn: async (id) => {
-                    await fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/rbac/permissions/${id}`, {
+                    await fetch(`/api/rbac/permissions/${id}`, {
                         method: 'DELETE'
                     }).then(data => data.json())
                 },

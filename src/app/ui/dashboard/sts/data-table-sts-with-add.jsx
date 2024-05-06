@@ -1,5 +1,4 @@
 "use client"
-
 import * as React from "react"
 import {
     flexRender,
@@ -56,7 +55,7 @@ export function DataTable({
 
 
     return (
-        <div>
+        <div className="overflow-auto p-1">
             <div className="flex items-center py-4 gap-3">
                 <Input
                     placeholder='Search here...'
@@ -94,7 +93,7 @@ export function DataTable({
                             })}
                     </DropdownMenuContent>
                 </DropdownMenu>
-                <Button className="h-9" onClick={() => setOpen(true)}>Add</Button>
+                <Button variant="custom" className="h-9" onClick={() => setOpen(true)}>Add</Button>
             </div>
             <div className="rounded-md border">
                 <Table className='bg-white'>

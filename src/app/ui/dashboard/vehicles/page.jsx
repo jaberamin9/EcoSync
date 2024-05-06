@@ -2,10 +2,8 @@
 import "@/app/globals.css";
 import { columns } from "./columns"
 import { DataTable } from "@/app/ui/dashboard/vehicles/data-table-vehicles-with-add"
-import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
 
@@ -17,10 +15,10 @@ export default function LandfillOperation() {
         router.push('/ui/dashboard');
     } else {
         const fetchWdeData = async () => {
-            return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/vehicles`, {
+            return fetch(`/api/vehicles`, {
                 method: 'GET'
             }).then(data => data.json()).then(data => {
-                const newData = data.vehicles.map(item => {
+                const newData = data.vehicles.reverse().map(item => {
                     return {
                         id: item._id,
                         vehicleId: item.vehicleId,

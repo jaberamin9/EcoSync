@@ -1,9 +1,6 @@
 "use client"
-
-import { ColumnDef } from "@tanstack/react-table"
 import { MoreHorizontal, ArrowUpDown } from "lucide-react"
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
@@ -18,8 +15,9 @@ import { AddViewDialog } from "@/components/add-view-dialog";
 import { useState } from "react";
 import { BillAndSlip } from "@/components/bill-and-slip";
 
+
 async function getBill(id) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/wde/${id}/bill`, {
+    return fetch(`/api/wde/${id}/bill`, {
         method: 'GET'
     }).then(data => data.json())
 }
@@ -179,7 +177,7 @@ export const columns = [
 
             const mutation = useMutation({
                 mutationFn: async (id) => {
-                    await fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/wde/${id}`, {
+                    await fetch(`/api/wde/${id}`, {
                         method: 'DELETE'
                     }).then(data => data.json())
                 },

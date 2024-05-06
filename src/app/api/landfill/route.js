@@ -1,7 +1,7 @@
 import { connect } from "@/dbConnection/dbConnection";
 import Landfill from "@/models/landfill";
 import { NextRequest, NextResponse } from "next/server";
-import { getDataFromToken } from "@/utils/getDataFromToken";
+import { getDataFromToken } from "@/utils/get-data-from-token";
 import User from "@/models/user";
 
 connect()

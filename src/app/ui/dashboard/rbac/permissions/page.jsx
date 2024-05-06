@@ -15,10 +15,10 @@ export default function RbacOperation() {
         router.push('/ui/dashboard');
     } else {
         const fetchWdeData = async () => {
-            return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/rbac/permissions`, {
+            return fetch(`/api/rbac/permissions`, {
                 method: 'GET'
             }).then(data => data.json()).then(data => {
-                const newData = data.permission.map(item => {
+                const newData = data.permission.reverse().map(item => {
                     return {
                         id: item._id,
                         permissionsName: item.permissionsName,

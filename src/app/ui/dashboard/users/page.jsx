@@ -16,18 +16,18 @@ import {
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { useRouter } from "next/navigation";
-import SelectDropdown from "@/components/SelectDropdown";
+import SelectDropdown from "@/components/select-dropdown";
 
 
 
 async function getRole() {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/users/roles`, {
+    return fetch(`/api/users/roles`, {
         method: 'GET'
     }).then(data => data.json())
 }
 
 async function assignRole(credentials, id) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/users/${id}/roles`, {
+    return fetch(`/api/users/${id}/roles`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -83,10 +83,10 @@ export default function LandfillOperation() {
         }
 
         const fetchWdeData = async () => {
-            return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/users`, {
+            return fetch(`/api/users`, {
                 method: 'GET'
             }).then(data => data.json()).then(data => {
-                const newData = data.users.map(item => {
+                const newData = data.users.reverse().map(item => {
                     return {
                         id: item._id,
                         username: item.username,
@@ -102,7 +102,7 @@ export default function LandfillOperation() {
             queryFn: fetchWdeData,
         });
 
-
+        console.log(data)
         return (
             <>
                 <span className="font-bold text-4xl">User Operation</span>
@@ -138,7 +138,7 @@ export default function LandfillOperation() {
                                 </CardContent>
 
                                 <CardFooter className="flex justify-between pb-3">
-                                    <Button onClick={handleSubmitForAssignRole} disabled={loading}>
+                                    <Button className='w-full' variant="custom" onClick={handleSubmitForAssignRole} disabled={loading}>
                                         Assign
                                         {loading ? <Loader2 className="ml-2 h-4 w-4 animate-spin" /> : ""}
                                     </Button>

@@ -1,6 +1,4 @@
 "use client"
-
-
 import * as React from "react"
 import {
     flexRender,
@@ -97,7 +95,7 @@ export function DataTable({
                             })}
                     </DropdownMenuContent>
                 </DropdownMenu>
-                <Button className="h-9" onClick={() => setOpen(true)}>Add</Button>
+                <Button variant="custom" className="h-9" onClick={() => setOpen(true)}>Add</Button>
             </div>
             <div className="rounded-md border">
                 <Table className='bg-white'>

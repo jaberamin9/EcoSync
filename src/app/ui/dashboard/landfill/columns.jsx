@@ -1,9 +1,6 @@
 "use client"
-
-import { ColumnDef } from "@tanstack/react-table"
 import { MoreHorizontal, ArrowUpDown } from "lucide-react"
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
@@ -14,15 +11,13 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useToast } from "@/components/ui/use-toast";
-import { AddViewDialog } from "@/components/add-view-dialog";
 import { useState } from "react";
-import { BillAndSlip } from "@/components/bill-and-slip";
 import Map from "@/components/map";
-import LandfillOperation from "./page";
 import { LandfillOperationDialog } from "@/components/landfill-operation-dialog";
 
+
 async function getBill(id) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/wde/${id}/bill`, {
+    return fetch(`/api/wde/${id}/bill`, {
         method: 'GET'
     }).then(data => data.json())
 }
@@ -141,7 +136,7 @@ export const columns = [
             const [open, setOpen] = useState(false);
             return <>
                 <div className="flex justify-center" onClick={() => setOpen(true)}>
-                    <div className="cursor-pointer text-center bg-green-400 text-white rounded-sm w-[100px] p-1">see on map</div>
+                    <div className="cursor-pointer text-center bg-gray-200 text-black rounded-sm w-[100px] p-1">see on map</div>
                 </div>
                 <Map location={row.getValue("location")} open={open} setOpen={setOpen} popupText={row.original.landfillName}></Map>
             </>
@@ -167,7 +162,7 @@ export const columns = [
 
             const mutation = useMutation({
                 mutationFn: async (id) => {
-                    await fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/landfill/${id}`, {
+                    await fetch(`/api/landfill/${id}`, {
                         method: 'DELETE'
                     }).then(data => data.json())
                 },

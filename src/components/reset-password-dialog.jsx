@@ -11,12 +11,11 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useState } from "react"
-import { Icon } from "@iconify/react"
 
 
 
 async function resetPassword(credentials) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/auth/change-password`, {
+    return fetch(`/api/auth/change-password`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -82,7 +81,7 @@ export function ResetPasswordDialog({ open, setOpen }) {
                 </div>
 
                 <DialogFooter>
-                    <Button onClick={handleSubmit} disabled={loading}>
+                    <Button variant="custom" onClick={handleSubmit} disabled={loading}>
                         Reset Password
                         {loading ? <Loader2 className="ml-2 h-4 w-4 animate-spin" /> : ""}
                     </Button>

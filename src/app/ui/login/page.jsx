@@ -19,7 +19,7 @@ import Link from 'next/link';
 
 
 async function loginUser(credentials) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/auth/login`, {
+    return fetch(`/api/auth/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -30,17 +30,20 @@ async function loginUser(credentials) {
 
 export default function Home() {
     const router = useRouter();
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
+    const [inputField, setInputField] = useState({ email: '', password: '' })
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
+
+    const onChange = (e) => {
+        setInputField({ ...inputField, [e.target.name]: e.target.value })
+    }
 
     const handleSubmit = async () => {
         setLoading(true)
 
         const token = await loginUser({
-            email,
-            password
+            email: inputField.email,
+            password: inputField.password
         });
         if (token.success) {
             setLoading(false)
@@ -55,8 +58,8 @@ export default function Home() {
 
     return (
         <div className=" h-screen bg-gray-200 flex justify-center items-center">
-            <div className=" w-[50%] h-[50%] rounded-lg flex flex-wrap bg-gray-100 overflow-hidden shadow-lg">
-                <div className="flex-1">
+            <div className="px-4 m-4 md:px-0 md:m-0 md:w-[50%] md:h-[50%] rounded-lg flex flex-wrap bg-gray-100 overflow-hidden shadow-lg">
+                <div className="flex-1 hidden md:block md:w-[300px] md:h-auto">
                     <div className="w-full h-full rounded-lg overflow-hidden">
                         <Image className="w-full h-full object-cover" priority={true} src={pic} alt="" />
                     </div>
@@ -68,25 +71,25 @@ export default function Home() {
                         </CardHeader>
                         <CardContent className="pb-2 ">
                             <form>
-                                <div className="grid w-full items-center gap-4">
+                                <div className="grid w-full lg:w-[260px] items-center gap-4">
                                     <div className="flex flex-col space-y-1.5">
                                         <Label htmlFor="email">Email</Label>
-                                        <Input onChange={e => setEmail(e.target.value)} id="email" type="email" placeholder="Enter your email" />
+                                        <Input onChange={e => onChange(e)} name="email" id="email" type="email" placeholder="Enter your email" />
                                     </div>
                                     <div className="flex flex-col space-y-1.5">
                                         <Label htmlFor="password">Password</Label>
-                                        <Input onChange={e => setPassword(e.target.value)} id="password" type="password" placeholder="Enter your password" />
+                                        <Input onChange={e => onChange(e)} name="password" id="password" type="password" placeholder="Enter your password" />
                                     </div>
                                 </div>
                             </form>
                         </CardContent>
                         {error != "" ? <p className="text-[11px] bg-red-100 p-1 rounded-md mx-6 text-center">{error}</p> : ""}
                         <CardFooter className="pt-2 flex justify-between">
-                            <Button onClick={handleSubmit} type="submit" disabled={loading}>
+                            <Button className='flex-1' variant="custom" onClick={handleSubmit} type="submit" disabled={loading}>
                                 Login
                                 {loading ? <Loader2 className="ml-2 h-4 w-4 animate-spin" /> : ""}
                             </Button>
-                            <Button variant="ghost" className="text-[11px]">
+                            <Button className='flex-1 text-[11px]' variant="ghost">
                                 <Link href="/ui/reset-password">reset password?</Link>
                             </Button>
 

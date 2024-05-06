@@ -11,12 +11,12 @@ import {
 import { Label } from "@/components/ui/label"
 import { useEffect, useState } from "react"
 import { useQueryClient } from "@tanstack/react-query";
-import MultiSelectDropdown from "./MultiSelectDropdown"
+import MultiSelectDropdown from "./multi-select-dropdown"
 
 
 
 async function updateAssignPermissions(credentials, id) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/rbac/roles/${id}/permissions`, {
+    return fetch(`/api/rbac/roles/${id}/permissions`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -27,7 +27,7 @@ async function updateAssignPermissions(credentials, id) {
 
 
 async function getPermissions() {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/rbac/permissions`, {
+    return fetch(`/api/rbac/permissions`, {
         method: 'GET'
     }).then(data => data.json())
 }
@@ -104,8 +104,8 @@ export function AssignPermissionsOperationDialog({ open, setOpen, data, add = fa
                 {error != "" ? <p className="text-[11px] w-[300px] bg-red-100 p-1 rounded-md text-center">{error}</p> : ""}
 
                 <DialogFooter className="sm:justify-end">
-                    <Button onClick={handleSubmit} type="submit" variant="secondary" disabled={loading}>
-                        {add ? "Create" : "Update"}
+                    <Button onClick={handleSubmit} type="submit" className='w-full' variant="custom" disabled={loading}>
+                        {add ? "Create" : "Assign"}
                         {loading ? <Loader2 className="ml-2 h-4 w-4 animate-spin" /> : ""}
                     </Button>
                 </DialogFooter>

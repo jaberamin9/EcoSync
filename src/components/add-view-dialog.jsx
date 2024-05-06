@@ -20,7 +20,7 @@ import { Icon } from "@iconify/react"
 
 
 async function updateWde(credentials, id) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/wde/${id}`, {
+    return fetch(`/api/wde/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -30,7 +30,7 @@ async function updateWde(credentials, id) {
 }
 
 async function addeWde(credentials) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/wde`, {
+    return fetch(`/api/wde`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -40,7 +40,7 @@ async function addeWde(credentials) {
 }
 
 async function updateStatus(credentials, id) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/wce/${id}`, {
+    return fetch(`/api/wce/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -112,14 +112,11 @@ export function AddViewDialog({ isUpdate, open, setOpen, wde, addWde = false }) 
             <DialogContent className="sm:max-w-md w-auto">
                 <DialogHeader>
                     <DialogTitle>{addWde ? "Add Wde" : "Update"}</DialogTitle>
-                    <DialogDescription>
-                        Add Waste disposal event
-                    </DialogDescription>
                 </DialogHeader>
 
                 <div className="grid w-auto max-w-sm items-center gap-1.5">
                     <Label htmlFor="disposed">Volume Disposed</Label>
-                    <Input onChange={e => setVolume(e.target.value)} value={volume} className="w-[300px] h-9" type="text" placeholder="Volume Disposed" />
+                    <Input onChange={e => setVolume(e.target.value)} value={volume} className="w-[300px] h-9" type="number" placeholder="Volume Disposed" />
                 </div>
 
 
@@ -154,8 +151,8 @@ export function AddViewDialog({ isUpdate, open, setOpen, wde, addWde = false }) 
                 {error != "" ? <p className="text-[11px] bg-red-100 p-1 rounded-md mx-6 text-center">{error}</p> : ""}
 
                 <DialogFooter className="sm:justify-end">
-                    <Button onClick={handleSubmit} type="submit" variant="secondary" disabled={loading}>
-                        Update
+                    <Button onClick={handleSubmit} type="submit" className='w-full' variant="custom" disabled={loading}>
+                        {addWde ? 'Add' : 'Update'}
                         {loading ? <Loader2 className="ml-2 h-4 w-4 animate-spin" /> : ""}
                     </Button>
                 </DialogFooter>

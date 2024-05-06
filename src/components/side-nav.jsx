@@ -1,16 +1,14 @@
 'use client';
-
 import React, { useState } from 'react';
-
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
 import { SIDENAV_ITEMS } from '@/constants';
 import { Icon } from '@iconify/react';
 
+
 const SideNav = () => {
     return (
-        <div className="z-30 md:w-60 bg-white h-screen flex-1 fixed border-r border-zinc-200 hidden md:flex">
+        <div className="z-50 md:w-60 bg-white h-screen fixed border-r border-zinc-200 hidden md:flex">
             <div className="flex flex-col space-y-6 w-full">
                 <Link
                     href="/"

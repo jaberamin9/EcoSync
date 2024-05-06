@@ -1,25 +1,22 @@
 "use client"
-import { Copy, Loader2 } from "lucide-react"
-
+import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
-    DialogClose,
     DialogContent,
     DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useEffect, useState } from "react"
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react"
+import { useQueryClient } from "@tanstack/react-query";
 
 
 async function updateUser(credentials, id) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/rbac/roles/${id}`, {
+    return fetch(`/api/rbac/roles/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -29,7 +26,7 @@ async function updateUser(credentials, id) {
 }
 
 async function addeUser(credentials) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/rbac/roles`, {
+    return fetch(`/api/rbac/roles`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -41,8 +38,6 @@ async function addeUser(credentials) {
 
 export function RbacOperationDialog({ open, setOpen, data, add = false }) {
     const [role, setRole] = useState(add ? "" : (data) ? data.roles : "")
-    // const [email, setEmail] = useState(add ? "" : (data) ? data.email : "")
-    // const [password, setPassword] = useState(add ? "" : (data) ? data.password : "")
 
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
@@ -78,9 +73,6 @@ export function RbacOperationDialog({ open, setOpen, data, add = false }) {
             <DialogContent className="sm:max-w-md w-auto">
                 <DialogHeader>
                     <DialogTitle>{add ? "Create role" : "Update role"}</DialogTitle>
-                    <DialogDescription>
-                        Insert your role
-                    </DialogDescription>
                 </DialogHeader>
 
 
@@ -92,7 +84,7 @@ export function RbacOperationDialog({ open, setOpen, data, add = false }) {
                 {error != "" ? <p className="text-[11px] w-[300px] bg-red-100 p-1 rounded-md text-center">{error}</p> : ""}
 
                 <DialogFooter className="sm:justify-end">
-                    <Button onClick={handleSubmit} type="submit" variant="secondary" disabled={loading}>
+                    <Button onClick={handleSubmit} type="submit" className='w-full' variant="custom" disabled={loading}>
                         {add ? "Create" : "Update"}
                         {loading ? <Loader2 className="ml-2 h-4 w-4 animate-spin" /> : ""}
                     </Button>

@@ -2,7 +2,6 @@
 import "@/app/globals.css";
 import { columns } from "./columns"
 import { DataTable } from "@/app/ui/dashboard/sts/operation/data-table-sts"
-import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -16,10 +15,10 @@ export default function page() {
         router.push('/ui/dashboard');
     } else {
         const fetchWdeData = async () => {
-            return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/wce`, {
+            return fetch(`/api/wce`, {
                 method: 'GET'
             }).then(data => data.json()).then(data => {
-                const newData = data.wce.map(item => {
+                const newData = data.wce.reverse().map(item => {
                     return {
                         id: item._id,
                         stsId: item.stsId._id,
@@ -50,13 +49,13 @@ export default function page() {
 
         return (
             <>
-                <span className="font-bold text-4xl">Secondary Transfer Stations Operation</span>
-                <div className="overflow-x-auto" style={{ height: "calc(100vh - 120px)" }}>
+                <span className="font-bold text-2xl">Secondary Transfer Stations Operation</span>
+                <div className="">
                     {isLoading ?
-                        <div className="w-full h-full flex justify-center items-center">
+                        <div className="w-full h-[80vh] flex justify-center items-center">
                             <Loader2 className="ml-2 h-10 w-10 animate-spin" />
                         </div>
-                        : <div className="p-8">
+                        : <div className="mt-4 px-8 bg-white rounded-md shadow py-4">
                             <DataTable columns={columns} data={data} />
                         </div>
                     }

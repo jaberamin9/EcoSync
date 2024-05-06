@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { connect } from "@/dbConnection/dbConnection";
 import User from "@/models/user";
 import speakeasy from 'speakeasy';
-import { tokenGenerate } from "@/utils/tokenGenerate";
+import { tokenGenerate } from "@/utils/token-generate";
 
 connect()
 

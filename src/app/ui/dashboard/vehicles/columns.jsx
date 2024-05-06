@@ -1,9 +1,6 @@
 "use client"
-
-import { ColumnDef } from "@tanstack/react-table"
 import { MoreHorizontal, ArrowUpDown } from "lucide-react"
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
@@ -14,44 +11,18 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useToast } from "@/components/ui/use-toast";
-import { AddViewDialog } from "@/components/add-view-dialog";
 import { useState } from "react";
-import { BillAndSlip } from "@/components/bill-and-slip";
-import Map from "@/components/map";
-import LandfillOperation from "./page";
-import { LandfillOperationDialog } from "@/components/landfill-operation-dialog";
 import { VehiclesOperationDialog } from "@/components/vehicles-operation-dialog";
 
+
+
 async function getBill(id) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/wde/${id}/bill`, {
+    return fetch(`/api/wde/${id}/bill`, {
         method: 'GET'
     }).then(data => data.json())
 }
 
-function formatDate(dateVal) {
-    var newDate = new Date(dateVal);
-    var sMonth = padValue(newDate.getMonth() + 1);
-    var sDay = padValue(newDate.getDate());
-    var sYear = newDate.getFullYear();
-    var sHour = newDate.getHours();
-    var sMinute = padValue(newDate.getMinutes());
-    var sAMPM = "AM";
-    var iHourCheck = parseInt(sHour);
-    if (iHourCheck > 12) {
-        sAMPM = "PM";
-        sHour = iHourCheck - 12;
-    }
-    else if (iHourCheck === 0) {
-        sHour = "12";
-    }
-    sHour = padValue(sHour);
-    const date = sMonth + "/" + sDay + "/" + sYear
-    const time = sHour + ":" + sMinute + " " + sAMPM
-    return [date, time];
-}
-function padValue(value) {
-    return (value < 10) ? "0" + value : value;
-}
+
 
 export const columns = [
     {
@@ -194,7 +165,7 @@ export const columns = [
 
             const mutation = useMutation({
                 mutationFn: async (id) => {
-                    await fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/vehicles/${id}`, {
+                    await fetch(`/api/vehicles/${id}`, {
                         method: 'DELETE'
                     }).then(data => data.json())
                 },

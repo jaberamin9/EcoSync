@@ -2,7 +2,6 @@
 import "@/app/globals.css";
 import { columns } from "./columns"
 import { DataTable } from "@/app/ui/dashboard/rbac/data-table-role-with-add"
-import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -16,10 +15,10 @@ export default function RbacOperation() {
         router.push('/ui/dashboard');
     } else {
         const fetchWdeData = async () => {
-            return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/rbac/roles`, {
+            return fetch(`/api/rbac/roles`, {
                 method: 'GET'
             }).then(data => data.json()).then(data => {
-                const newData = data.roles.map(item => {
+                const newData = data.roles.reverse().map(item => {
                     return {
                         id: item._id,
                         roles: item.role,

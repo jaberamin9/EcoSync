@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { connect } from "@/dbConnection/dbConnection";
 import User from "@/models/user";
 import bcryptjs from "bcryptjs";
-import { getDataFromToken } from "@/utils/getDataFromToken";
+import { getDataFromToken } from "@/utils/get-data-from-token";
 
 
 connect()

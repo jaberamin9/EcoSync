@@ -1,9 +1,8 @@
 "use client"
 import React, { useState } from 'react'
-import { MapContainer, TileLayer, useMap, Marker, Popup, useMapEvents } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import { Icon } from 'leaflet';
-import customMarkerIcon from '@/img/location-icon.png';
 
 function LeafLetMap({ setLatlng, latlng, popupText, isClickAble = true }) {
 

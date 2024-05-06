@@ -1,5 +1,4 @@
 "use client"
-
 import * as React from "react"
 import {
     flexRender,
@@ -52,12 +51,17 @@ export function DataTable({
             sorting,
             columnFilters,
             columnVisibility,
+        },
+        initialState: {
+            pagination: {
+                pageSize: 5,
+            },
         }
     })
 
 
     return (
-        <div>
+        <div className="overflow-auto p-1">
             <div className="flex items-center py-4 gap-3">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -88,7 +92,7 @@ export function DataTable({
                     </DropdownMenuContent>
                 </DropdownMenu>
                 {role == "System Admin" ? "" :
-                    <Button className="h-9" onClick={() => setOpen(true)}>Add</Button>
+                    <Button variant="custom" className="h-9" onClick={() => setOpen(true)}>Add</Button>
                 }
             </div>
             <div className="rounded-md border">

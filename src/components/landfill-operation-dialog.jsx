@@ -12,25 +12,16 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useEffect, useState } from "react"
-import { format } from "date-fns"
-import { Calendar as CalendarIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Calendar } from "@/components/ui/calendar"
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover"
 import { useQueryClient } from "@tanstack/react-query";
-import MultiSelectDropdown from "./MultiSelectDropdown"
+import MultiSelectDropdown from "./multi-select-dropdown"
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Icon } from "@iconify/react"
-import LeafLetMap from "./LeafLetMap"
+import LeafLetMap from "./leaf-let-map"
 
 
 async function updateLandfill(credentials, id) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/landfill/${id}`, {
+    return fetch(`/api/landfill/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -40,7 +31,7 @@ async function updateLandfill(credentials, id) {
 }
 
 async function addeLandfill(credentials) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/landfill`, {
+    return fetch(`/api/landfill`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -50,7 +41,7 @@ async function addeLandfill(credentials) {
 }
 
 async function getUser() {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/users/?role=Landfill Manager`, {
+    return fetch(`/api/users/?role=Landfill Manager`, {
         method: 'GET'
     }).then(data => data.json())
 }
@@ -132,9 +123,6 @@ export function LandfillOperationDialog({ open, setOpen, data, add = false }) {
                 <div className="sm:max-w-md w-auto flex flex-col gap-3">
                     <DialogHeader>
                         <DialogTitle>{add ? "Add Landfill" : "Update"}</DialogTitle>
-                        <DialogDescription>
-                            Add Landfill
-                        </DialogDescription>
                     </DialogHeader>
 
                     <div className="grid w-auto max-w-sm items-center gap-1.5">
@@ -143,7 +131,7 @@ export function LandfillOperationDialog({ open, setOpen, data, add = false }) {
                     </div>
                     <div className="grid w-auto max-w-sm items-center gap-1.5">
                         <Label htmlFor="disposed">Capacity</Label>
-                        <Input onChange={e => setCapacity(e.target.value)} value={capacity} className="w-[300px] h-9" type="text" placeholder="Capacity" />
+                        <Input onChange={e => setCapacity(e.target.value)} value={capacity} className="w-[300px] h-9" type="number" placeholder="Capacity" />
                     </div>
                     <div className="grid w-full max-w-sm items-center gap-1.5">
                         <Label htmlFor="disposed">Operational Timespan</Label>
@@ -174,16 +162,13 @@ export function LandfillOperationDialog({ open, setOpen, data, add = false }) {
                         <Label htmlFor="disposed">Enter Location</Label>
                         <div className="flex gap-2">
                             <Input disabled value={location} className="h-9" type="text" placeholder="Location" />
-                            {/* <Button className='h-9'>
-                                <a href="https://www.google.com/maps/@23.7953844,90.9511541,7.25z?entry=ttu" target="_blank">Get Location</a>
-                            </Button> */}
                         </div>
                     </div>
                     {error != "" ? <p className="text-[11px] bg-red-100 p-1 rounded-md mx-6 text-center">{error}</p> : ""}
 
                     <DialogFooter className="sm:justify-end">
-                        <Button onClick={handleSubmit} type="submit" variant="secondary" disabled={loading}>
-                            Update
+                        <Button onClick={handleSubmit} type="submit" className='w-full' variant="custom" disabled={loading}>
+                            {add ? 'Add' : 'Update'}
                             {loading ? <Loader2 className="ml-2 h-4 w-4 animate-spin" /> : ""}
                         </Button>
                     </DialogFooter>

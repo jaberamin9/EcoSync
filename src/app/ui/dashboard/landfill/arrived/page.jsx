@@ -2,7 +2,6 @@
 import "@/app/globals.css";
 import { columns } from "./columns"
 import { DataTable } from "./data-table"
-import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -16,10 +15,10 @@ export default function DemoPage() {
         router.push('/ui/dashboard');
     } else {
         const fetchWdeData = async () => {
-            return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/wde`, {
+            return fetch(`/api/wde`, {
                 method: 'GET'
             }).then(data => data.json()).then(data => {
-                const newData = data.wde.map(item => {
+                const newData = data.wde.reverse().map(item => {
                     return {
                         id: item._id,
                         sts: item.stsId.wardNumber,

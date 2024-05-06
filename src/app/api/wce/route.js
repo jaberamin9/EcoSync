@@ -1,7 +1,7 @@
 import { connect } from "@/dbConnection/dbConnection";
 import Wce from "@/models/wce";
 import { NextRequest, NextResponse } from "next/server";
-import { getDataFromToken } from "@/utils/getDataFromToken";
+import { getDataFromToken } from "@/utils/get-data-from-token";
 import Sts from "@/models/sts";
 import Vehicle from "@/models/vehicle";
 import Landfill from "@/models/landfill";

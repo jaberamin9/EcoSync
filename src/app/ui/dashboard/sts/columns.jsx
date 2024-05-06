@@ -1,5 +1,4 @@
 "use client"
-
 import { MoreHorizontal, ArrowUpDown } from "lucide-react"
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button"
@@ -19,7 +18,7 @@ import { StsOperationDialog } from "@/components/sts-operation-dialog";
 
 
 async function getBill(id) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/wde/${id}/bill`, {
+    return fetch(`/api/wde/${id}/bill`, {
         method: 'GET'
     }).then(data => data.json())
 }
@@ -95,7 +94,7 @@ export const columns = [
             const [open, setOpen] = useState(false);
             return <>
                 <div className="flex justify-center" onClick={() => setOpen(true)}>
-                    <div className="cursor-pointer text-center bg-green-400 text-white rounded-sm w-[100px] p-1">see on map</div>
+                    <div className="cursor-pointer text-center bg-gray-200 text-black rounded-sm w-[100px] p-1">see on map</div>
                 </div>
                 <Map location={row.getValue("location")} open={open} setOpen={setOpen} popupText={row.original.wardNumber}></Map>
 
@@ -122,7 +121,7 @@ export const columns = [
 
             const mutation = useMutation({
                 mutationFn: async (id) => {
-                    await fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/sts/${id}`, {
+                    await fetch(`/api/sts/${id}`, {
                         method: 'DELETE'
                     }).then(data => data.json())
                 },

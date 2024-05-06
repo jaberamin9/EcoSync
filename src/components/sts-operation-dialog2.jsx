@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button"
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -13,12 +12,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useEffect, useState } from "react"
 import { useQueryClient } from "@tanstack/react-query";
-import SelectDropdownWce from "./SelectDropdown"
+import SelectDropdownWce from "./select-dropdown"
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Icon } from "@iconify/react"
-import SelectDropdown from "./SelectDropdown"
-import LeafLetMapRouting from "./LeafLetMapRouting"
+import SelectDropdown from "./select-dropdown"
+import LeafLetMapRouting from "./leaf-let-map-routing"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import {
     Popover,
@@ -39,7 +38,7 @@ import { Switch } from "./ui/switch"
 
 
 async function updateWce(credentials, id) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/wce/${id}`, {
+    return fetch(`/api/wce/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -49,7 +48,7 @@ async function updateWce(credentials, id) {
 }
 
 async function addWce(credentials) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/wce`, {
+    return fetch(`/api/wce`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -59,24 +58,24 @@ async function addWce(credentials) {
 }
 
 async function getVehicles() {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/vehicles`, {
+    return fetch(`/api/vehicles`, {
         method: 'GET'
     }).then(data => data.json())
 }
 
 async function getLandfill() {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/landfill`, {
+    return fetch(`/api/landfill`, {
         method: 'GET'
     }).then(data => data.json())
 }
 async function getStsID() {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/sts`, {
+    return fetch(`/api/sts`, {
         method: 'GET'
     }).then(data => data.json())
 }
 
 async function updateCurrentLandfillCapacity(credentials, id) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/landfill/${id}`, {
+    return fetch(`/api/landfill/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -467,11 +466,11 @@ export function StsOperationDialog2({ open, setOpen, data, add = false }) {
                     <div className="flex gap-2">
                         <div className="grid w-auto items-center gap-1.5">
                             <Label htmlFor="disposed">Volume Collection</Label>
-                            <Input onChange={e => setVolume(e.target.value)} value={volume} className="w-[150px] h-9" type="text" placeholder="volume collection" />
+                            <Input onChange={e => setVolume(e.target.value)} value={volume} className="w-[150px] h-9" type="number" placeholder="volume collection" />
                         </div>
                         <div className="grid w-auto items-center gap-1.5">
                             <Label htmlFor="disposed">Totla KiloMeter</Label>
-                            <Input onChange={e => setTotlaKiloMeter(e.target.value)} value={totlaKiloMeter} className="w-[150px] h-9 text-blue-500" type="text" placeholder="totla kiloMeter" />
+                            <Input onChange={e => setTotlaKiloMeter(e.target.value)} value={totlaKiloMeter} className="w-[150px] h-9 text-blue-500" type="number" placeholder="totla kiloMeter" />
                         </div>
                     </div>
 
@@ -591,7 +590,7 @@ export function StsOperationDialog2({ open, setOpen, data, add = false }) {
                     {error != "" ? <p className="text-[11px] bg-red-100 p-1 rounded-md mx-6 text-center">{error}</p> : ""}
 
                     <DialogFooter className="sm:justify-end">
-                        <Button onClick={handleSubmit} type="submit" variant="secondary" disabled={loading}>
+                        <Button onClick={handleSubmit} type="submit" className='w-full' variant="custom" disabled={loading}>
                             {add ? "Add" : "Update"}
                             {loading ? <Loader2 className="ml-2 h-4 w-4 animate-spin" /> : ""}
                         </Button>

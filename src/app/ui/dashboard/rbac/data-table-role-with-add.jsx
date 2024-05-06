@@ -1,12 +1,6 @@
 "use client"
-
-
 import * as React from "react"
 import {
-    ColumnDef,
-    ColumnFiltersState,
-    SortingState,
-    VisibilityState,
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
@@ -32,10 +26,6 @@ import {
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { AddViewDialog } from '@/components/add-view-dialog'
-import { LandfillOperationDialog } from "@/components/landfill-operation-dialog"
-import { StsOperationDialog } from "@/components/sts-operation-dialog"
-import { VehiclesOperationDialog } from "@/components/vehicles-operation-dialog"
 import { RbacOperationDialog } from "@/components/rbac-operation-dialog"
 
 
@@ -105,7 +95,7 @@ export function DataTable({
                             })}
                     </DropdownMenuContent>
                 </DropdownMenu>
-                <Button className="h-9" onClick={() => setOpen(true)}>Add</Button>
+                <Button className="h-9" variant="custom" onClick={() => setOpen(true)}>Add</Button>
             </div>
             <div className="rounded-md border">
                 <Table className='bg-white'>

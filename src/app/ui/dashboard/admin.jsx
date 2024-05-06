@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Button } from "@/components/ui/button"
 import {
     Card,
     CardContent,
@@ -8,14 +6,13 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { BarChart } from '@/components/BarChart';
+import { BarChart } from '@/components/bar-chart';
 import { useQuery } from "@tanstack/react-query";
 import {
     Table,
     TableBody,
     TableCaption,
     TableCell,
-    TableFooter,
     TableHead,
     TableHeader,
     TableRow,
@@ -23,7 +20,7 @@ import {
 
 
 async function getSts() {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/wce`, {
+    return fetch(`/api/wce`, {
         method: 'GET'
     }).then(data => data.json())
 }
@@ -69,7 +66,6 @@ function Admin() {
 
     useEffect(() => {
         if (!isLoading) {
-            console.log(data)
             setChartData(
                 {
                     labels: data.result.map((data) => data.day),
@@ -106,7 +102,7 @@ function Admin() {
                 setTotalTrip(res.wce.length)
 
 
-                let newData = res.wce.slice(-5);
+                let newData = res.wce.slice(-8);
                 newData = newData.map((item, idx) => {
                     return {
                         id: item._id,
@@ -126,63 +122,52 @@ function Admin() {
 
     return (
         <>
-            <span className="font-bold text-4xl">Dashboard</span>
-            <div className="overflow-x-auto" style={{ height: "calc(100vh - 120px)" }}>
-                <div className='p-8 pt-4 pb-0 flex flex-col md:flex-row justify-around gap-3'>
-                    <Card className="w-[250px] sm:w-[400px] md:w-[450px]">
-                        <CardHeader>
-                            <CardDescription className='text-center text-black font-medium'>Total Waste Collection</CardDescription>
-                        </CardHeader>
-                        <CardContent className='flex justify-center'>
-                            <CardTitle>{volumeCollection} T</CardTitle>
-                        </CardContent>
-                    </Card>
-                    <Card className="w-[250px] sm:w-[400px] md:w-[450px]">
-                        <CardHeader>
-                            <CardDescription className='text-center text-black font-medium'>Total KiloMeter</CardDescription>
-                        </CardHeader>
-                        <CardContent className='flex justify-center'>
-                            <CardTitle>{totalKiloMeter} KM</CardTitle>
-                        </CardContent>
-                    </Card>
-                    <Card className="w-[250px] sm:w-[400px] md:w-[450px]">
-                        <CardHeader>
-                            <CardDescription className='text-center text-black font-medium'>Total Trip</CardDescription>
-                        </CardHeader>
-                        <CardContent className='flex justify-center'>
-                            <CardTitle>{totalTrip}</CardTitle>
-                        </CardContent>
-                    </Card>
+            <span className="font-bold text-2xl">Dashboard</span>
+            <div className="overflow-x-auto">
+                <div className='pt-4 pb-8 flex flex-col md:flex-row justify-around gap-3'>
+                    <diV className="bg-green-200 px-4 py-8 flex-1 flex flex-col gap-4 justify-center items-center rounded-md shadow-md">
+                        <span className='text-sm text-center text-black font-medium'>Total Waste Collection</span>
+                        <span className='text-2xl font-semibold leading-none tracking-tight'>{volumeCollection} T</span>
+                    </diV>
+                    <diV className="bg-red-200 px-4 py-8 flex-1 flex flex-col gap-4 justify-center items-center rounded-md shadow-md">
+                        <span className='text-sm text-center text-black font-medium'>Total KiloMeter</span>
+                        <span className='text-2xl font-semibold leading-none tracking-tight'>{totalKiloMeter.toFixed(2)} KM</span>
+                    </diV>
+                    <diV className="bg-blue-200 px-4 py-8 flex-1 flex flex-col gap-4 justify-center items-center rounded-md shadow-md">
+                        <span className='text-sm text-center text-black font-medium'>Total Trip</span>
+                        <span className='text-2xl font-semibold leading-none tracking-tight'>{totalTrip}</span>
+                    </diV>
                 </div>
-                <div className="p-8 flex flex-col lg:flex-row gap-4 w-full">
+                <div className="flex flex-col lg:flex-row gap-4 w-full flex-wrap">
                     <div className='flex-1 h-[400px] bg-white rounded-xl p-4 shadow-md'>
                         <BarChart chartData={chartData} text="Last 7 day's waste collection" />
                     </div>
-                    <div className='bg-white rounded-xl p-4 h-[400px] w-[390px] shadow-md overflow-auto'>
-                        <Table>
-                            <TableCaption>recent entry</TableCaption>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead className="w-[100px]">STS Ward</TableHead>
-                                    <TableHead>Waste</TableHead>
-                                    <TableHead>Landfill Name</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {
-                                    loading ? "" :
-                                        dataTable.map((item) => {
-                                            return <TableRow key={item.id}>
-                                                <TableCell className="font-medium">{item.wardNumber}</TableCell>
-                                                <TableCell>{item.volumeCollection}</TableCell>
-                                                <TableCell>{item.landfillName}</TableCell>
-                                            </TableRow>
-                                        })
-                                }
+                    <div className='flex-1 bg-white rounded-xl p-4 h-[400px] shadow-md overflow-hidden'>
+                        <div className='w-full text-center pb-2 font-semibold'>Recent Entry</div>
+                        <div className='h-[340px]'>
+                            <Table className='table-fixed'>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>STS Ward</TableHead>
+                                        <TableHead>Waste</TableHead>
+                                        <TableHead>Landfill Name</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {
+                                        loading ? "" :
+                                            dataTable.map((item) => {
+                                                return <TableRow key={item.id}>
+                                                    <TableCell className="font-medium">{item.wardNumber}</TableCell>
+                                                    <TableCell>{item.volumeCollection}T</TableCell>
+                                                    <TableCell>{item.landfillName}</TableCell>
+                                                </TableRow>
+                                            })
+                                    }
 
-
-                            </TableBody>
-                        </Table>
+                                </TableBody>
+                            </Table>
+                        </div>
                     </div>
                 </div>
             </div >

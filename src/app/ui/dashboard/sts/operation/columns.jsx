@@ -1,5 +1,4 @@
 "use client"
-
 import { MoreHorizontal, ArrowUpDown } from "lucide-react"
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button"
@@ -169,7 +168,7 @@ export const columns = [
             const [open, setOpen] = useState(false);
             return <>
                 <div className="flex justify-center" onClick={() => setOpen(true)}>
-                    <div className="cursor-pointer text-center bg-green-400 text-white rounded-sm w-[100px] p-1">see on map</div>
+                    <div className="cursor-pointer text-center bg-gray-200 text-black rounded-sm w-[100px] p-1">see on map</div>
                 </div>
                 <Map location={row.getValue("location")} open={open} setOpen={setOpen} popupText={row.original.landfillName}></Map>
 
@@ -187,14 +186,14 @@ export const columns = [
 
             const mutation = useMutation({
                 mutationFn: async (id) => {
-                    await fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/landfill/${rowData.landfill_id}`, {
+                    await fetch(`/api/landfill/${rowData.landfill_id}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({ capacity: -rowData.volumeCollection })
                     }).then(async data => {
-                        return await fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/wce/${id}`, {
+                        return await fetch(`/api/wce/${id}`, {
                             method: 'DELETE'
                         }).then(data => data.json())
                     })

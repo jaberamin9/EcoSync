@@ -13,13 +13,13 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useEffect, useState } from "react"
 import { useQueryClient } from "@tanstack/react-query";
-import MultiSelectDropdown from "./MultiSelectDropdown"
-import LeafLetMap from "./LeafLetMap"
+import MultiSelectDropdown from "./multi-select-dropdown"
+import LeafLetMap from "./leaf-let-map"
 
 
 
 async function updateSTS(credentials, id) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/sts/${id}`, {
+    return fetch(`/api/sts/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -29,7 +29,7 @@ async function updateSTS(credentials, id) {
 }
 
 async function addeSTS(credentials) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/sts`, {
+    return fetch(`/api/sts`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -39,7 +39,7 @@ async function addeSTS(credentials) {
 }
 
 async function getUser() {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/users/?role=STS Manager`, {
+    return fetch(`/api/users/?role=STS Manager`, {
         method: 'GET'
     }).then(data => data.json())
 }
@@ -115,19 +115,16 @@ export function StsOperationDialog({ open, setOpen, data, add = false }) {
             <DialogContent className="flex gap-4 flex-wrap md:flex-nowrap">
                 <div className="sm:max-w-md w-auto flex flex-col gap-3">
                     <DialogHeader>
-                        <DialogTitle>{add ? "Add STS" : "Update"}</DialogTitle>
-                        <DialogDescription>
-                            Add STS
-                        </DialogDescription>
+                        <DialogTitle>{add ? "Add STS" : "Update STS"}</DialogTitle>
                     </DialogHeader>
 
                     <div className="grid w-auto max-w-sm items-center gap-1.5">
                         <Label htmlFor="disposed">Ward Number</Label>
-                        <Input onChange={e => setWardNumber(e.target.value)} value={wardNumber} className="w-[300px] h-9" type="text" placeholder="Ward Number" />
+                        <Input onChange={e => setWardNumber(e.target.value)} value={wardNumber} className="w-[300px] h-9" type="number" placeholder="Ward Number" />
                     </div>
                     <div className="grid w-auto max-w-sm items-center gap-1.5">
                         <Label htmlFor="disposed">Capacity</Label>
-                        <Input onChange={e => setCapacity(e.target.value)} value={capacity} className="w-[300px] h-9" type="text" placeholder="Capacity" />
+                        <Input onChange={e => setCapacity(e.target.value)} value={capacity} className="w-[300px] h-9" type="number" placeholder="Capacity" />
                     </div>
 
 
@@ -154,8 +151,8 @@ export function StsOperationDialog({ open, setOpen, data, add = false }) {
                     {error != "" ? <p className="text-[11px] bg-red-100 p-1 rounded-md mx-6 text-center">{error}</p> : ""}
 
                     <DialogFooter className="sm:justify-end">
-                        <Button onClick={handleSubmit} type="submit" variant="secondary" disabled={loading}>
-                            Update
+                        <Button className='w-full' variant="custom" onClick={handleSubmit} type="submit" disabled={loading}>
+                            {add ? 'Add' : 'Update'}
                             {loading ? <Loader2 className="ml-2 h-4 w-4 animate-spin" /> : ""}
                         </Button>
                     </DialogFooter>

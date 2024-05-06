@@ -13,12 +13,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useState } from "react"
 import { useQueryClient } from "@tanstack/react-query";
-import MultiSelectDropdown from "./MultiSelectDropdown"
+import MultiSelectDropdown from "./multi-select-dropdown"
 
 
 
 async function updatePermissions(credentials, id) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/rbac/permissions/${id}`, {
+    return fetch(`/api/rbac/permissions/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -29,7 +29,7 @@ async function updatePermissions(credentials, id) {
 
 
 async function addePermissions(credentials) {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/rbac/permissions`, {
+    return fetch(`/api/rbac/permissions`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -90,9 +90,6 @@ export function PermissionsOperationDialog({ open, setOpen, data, add = false })
             <DialogContent className="sm:max-w-md w-auto">
                 <DialogHeader>
                     <DialogTitle>{add ? "Create permission" : "Update permission"}</DialogTitle>
-                    <DialogDescription>
-                        Insert your permission
-                    </DialogDescription>
                 </DialogHeader>
 
 
@@ -114,7 +111,7 @@ export function PermissionsOperationDialog({ open, setOpen, data, add = false })
                 {error != "" ? <p className="text-[11px] w-[300px] bg-red-100 p-1 rounded-md text-center">{error}</p> : ""}
 
                 <DialogFooter className="sm:justify-end">
-                    <Button onClick={handleSubmit} type="submit" variant="secondary" disabled={loading}>
+                    <Button onClick={handleSubmit} type="submit" className='w-full' variant="custom" disabled={loading}>
                         {add ? "Create" : "Update"}
                         {loading ? <Loader2 className="ml-2 h-4 w-4 animate-spin" /> : ""}
                     </Button>

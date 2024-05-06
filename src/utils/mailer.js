@@ -28,14 +28,12 @@ export const sendEmail = async ({ email, emailType, userId, password = "" }) => 
             }
         });
 
-
         const mailOptions = {
             from: 'jaberamin9@gmail.com',
             to: email,
             subject: emailType === "CREATE" ? "Registration success" : "Reset your password",
             html: emailType === "CREATE" ? `<p>email: ${email}</br>password: ${password}</p>` : `<p>your otp is: ${code}</p>`
         }
-
         const mailresponse = await transport.sendMail(mailOptions);
         return mailresponse;
 

@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useSelectedLayoutSegment, useRouter } from 'next/navigation';
@@ -26,18 +25,19 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ProfileDialog } from './profile-dialog';
-import { ResetPasswordDialog } from './ResetPasswordDialog';
+import { ResetPasswordDialog } from './reset-password-dialog';
 
 
 
 async function logout() {
-    return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/auth/logout`, {
+    return fetch(`/api/auth/logout`, {
         method: 'GET'
     }).then(data => data.json())
 }
 
 const Header = () => {
     const username = localStorage.getItem('name');
+    const role = localStorage.getItem('role');
     const scrolled = useScroll(5);
     const selectedLayout = useSelectedLayoutSegment();
 
@@ -79,7 +79,7 @@ const Header = () => {
                         <span className="h-7 w-7 bg-zinc-300 rounded-lg" />
                         <span className="font-bold text-xl flex ">EcoSync</span>
                     </Link>
-                    <div className=' font-bold'>Welcome {username}</div>
+                    <div className=' font-bold'>Welcome {username} ({role})</div>
                 </div>
 
                 <div className="hidden md:block">
