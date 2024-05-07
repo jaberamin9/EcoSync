@@ -40,16 +40,12 @@ function LandfillManager() {
         labels: Data?.map((data) => data.year),
         datasets: [
             {
-                label: "Users Gained ",
+                label: "Total waste disposed",
                 data: Data?.map((data) => data.userGain),
                 backgroundColor: [
-                    "rgba(75,192,192,1)",
-                    "#ecf0f1",
-                    "#50AF95",
-                    "#f3ba2f",
-                    "#2a71d0"
+                    "#9DBD4C",
                 ],
-                borderColor: "black",
+                borderColor: "#9DBD4C",
                 borderWidth: 2
             }
         ]
@@ -97,27 +93,29 @@ function LandfillManager() {
                     volumeDisposedByDayOfWeek[dayName] = (volumeDisposedByDayOfWeek[dayName] || 0) + obj.volumeDisposed;
                 });
 
-                const output = Object.entries(volumeDisposedByDayOfWeek).map(([day, volumeDisposed]) => ({
+                let output = Object.entries(volumeDisposedByDayOfWeek).map(([day, volumeDisposed]) => ({
                     day,
                     volumeDisposed
                 }));
 
+                const daysOfWeek = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+                const result = daysOfWeek.map(day => {
+                    const existingData = output.find(item => item.day === day);
+                    return existingData ? existingData : { volumeDisposed: 0, day };
+                });
+                output = result;
 
                 setChartData(
                     {
                         labels: output?.map((data) => data.day),
                         datasets: [
                             {
-                                label: "Total waste collection",
+                                label: "Total waste disposed",
                                 data: output?.map((data) => data.volumeDisposed),
                                 backgroundColor: [
-                                    "rgba(75,192,192,1)",
-                                    "#ecf0f1",
-                                    "#50AF95",
-                                    "#f3ba2f",
-                                    "#2a71d0"
+                                    "#9DBD4C",
                                 ],
-                                borderColor: "black",
+                                borderColor: "#9DBD4C",
                                 borderWidth: 2
                             }
                         ]
@@ -154,7 +152,7 @@ function LandfillManager() {
                 </div>
                 <div className="flex flex-col lg:flex-row gap-4 w-full flex-wrap">
                     <div className='flex-1 h-[400px] bg-white rounded-xl p-4 shadow-md'>
-                        <BarChart chartData={chartData} text="Last 7 day's waste collection" />
+                        <BarChart chartData={chartData} text="Last 7 day's waste disposed" />
                     </div>
                     <div className='flex-1 bg-white rounded-xl p-4 h-[400px] shadow-md overflow-hidden'>
                         <div className='w-full text-center pb-2 font-semibold'>Recent Entry</div>
@@ -162,7 +160,7 @@ function LandfillManager() {
                             <Table className='table-fixed'>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead className="w-[100px]">STS Ward Number</TableHead>
+                                        <TableHead className="w-[100px]">Ward Number</TableHead>
                                         <TableHead>Vehicle Id</TableHead>
                                         <TableHead>Type</TableHead>
                                         <TableHead>Volume Disposed</TableHead>
@@ -195,6 +193,6 @@ function LandfillManager() {
 export default LandfillManager
 
 function getDayName(dayOfWeek) {
-    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     return days[dayOfWeek];
 }

@@ -1,17 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
 import { BarChart } from '@/components/bar-chart';
 import { useQuery } from "@tanstack/react-query";
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableHead,
     TableHeader,
@@ -41,22 +33,26 @@ function Admin() {
                 label: "Users Gained ",
                 data: Data.map((data) => data.userGain),
                 backgroundColor: [
-                    "rgba(75,192,192,1)",
-                    "#ecf0f1",
-                    "#50AF95",
-                    "#f3ba2f",
-                    "#2a71d0"
+                    "#9DBD4C",
                 ],
-                borderColor: "black",
+                borderColor: "#9DBD4C",
                 borderWidth: 2
             }
         ]
     });
 
     const fetchWdeData = async () => {
-        return fetch(`http://localhost:${process.env.NEXT_PUBLIC_PORT}/api/wce?pre=7`, {
+        return fetch(`/api/wce?pre=7`, {
             method: 'GET'
-        }).then(data => data.json())
+        }).then(data => data.json()).then(data => {
+            const daysOfWeek = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+            const result = daysOfWeek.map(day => {
+                const existingData = data.result.find(item => item.day === day);
+                return existingData ? existingData : { volumeCollection: 0, day };
+            });
+            data.result = result;
+            return data
+        })
     };
 
     const { data, isError, isLoading } = useQuery({
@@ -74,14 +70,10 @@ function Admin() {
                             label: "Total waste collection",
                             data: data.result.map((data) => data.volumeCollection),
                             backgroundColor: [
-                                "rgba(75,192,192,1)",
-                                "#ecf0f1",
-                                "#50AF95",
-                                "#f3ba2f",
-                                "#2a71d0"
+                                "#9DBD4C",
                             ],
-                            borderColor: "black",
-                            borderWidth: 2
+                            borderColor: "#9DBD4C",
+                            borderWidth: 2,
                         }
                     ]
                 }

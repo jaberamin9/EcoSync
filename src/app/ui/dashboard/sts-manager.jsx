@@ -38,16 +38,12 @@ function StsManager() {
         labels: Data?.map((data) => data.year),
         datasets: [
             {
-                label: "Users Gained ",
+                label: "Total waste collection",
                 data: Data?.map((data) => data.userGain),
                 backgroundColor: [
-                    "rgba(75,192,192,1)",
-                    "#ecf0f1",
-                    "#50AF95",
-                    "#f3ba2f",
-                    "#2a71d0"
+                    "#9DBD4C",
                 ],
-                borderColor: "black",
+                borderColor: "#9DBD4C",
                 borderWidth: 2
             }
         ]
@@ -97,12 +93,18 @@ function StsManager() {
                     volumeDisposedByDayOfWeek[dayName] = (volumeDisposedByDayOfWeek[dayName] || 0) + obj.volumeCollection;
                 });
 
-                const output = Object.entries(volumeDisposedByDayOfWeek).map(([day, volumeCollection]) => ({
+                let output = Object.entries(volumeDisposedByDayOfWeek).map(([day, volumeCollection]) => ({
                     day,
                     volumeCollection
                 }));
 
-                console.log(output)
+                const daysOfWeek = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+                const result = daysOfWeek.map(day => {
+                    const existingData = output.find(item => item.day === day);
+                    return existingData ? existingData : { volumeCollection: 0, day };
+                });
+                output = result;
+
                 setChartData(
                     {
                         labels: output?.map((data) => data.day),
@@ -111,13 +113,9 @@ function StsManager() {
                                 label: "Total waste collection",
                                 data: output?.map((data) => data.volumeCollection),
                                 backgroundColor: [
-                                    "rgba(75,192,192,1)",
-                                    "#ecf0f1",
-                                    "#50AF95",
-                                    "#f3ba2f",
-                                    "#2a71d0"
+                                    "#9DBD4C",
                                 ],
-                                borderColor: "black",
+                                borderColor: "#9DBD4C",
                                 borderWidth: 2
                             }
                         ]
@@ -162,10 +160,10 @@ function StsManager() {
                             <Table className='table-fixed'>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>STS Ward Number</TableHead>
+                                        <TableHead>Ward Number</TableHead>
                                         <TableHead>Vehicle Id</TableHead>
                                         <TableHead>Type</TableHead>
-                                        <TableHead>Volume Disposed</TableHead>
+                                        <TableHead>Volume collection</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -193,6 +191,6 @@ function StsManager() {
 export default StsManager
 
 function getDayName(dayOfWeek) {
-    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     return days[dayOfWeek];
 }
