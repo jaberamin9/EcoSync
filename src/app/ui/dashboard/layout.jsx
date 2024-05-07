@@ -12,7 +12,7 @@ export default function RootLayout({ children }) {
     return (
         <div className="flex">
             <SideNav />
-            <main className="flex-1">
+            <main className="flex-1 w-full">
                 <MarginWidthWrapper>
                     <Header />
                     <HeaderMobile />

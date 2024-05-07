@@ -40,9 +40,9 @@ export default function LandfillOperation() {
         });
 
         return (
-            <>
+            <div>
                 <span className="font-bold text-2xl">Vehicles Operation</span>
-                <div className="">
+                <div>
                     {isLoading ?
                         <div className="w-full h-full flex justify-center items-center">
                             <Loader2 className="ml-2 h-[80vh] w-10 animate-spin" />
@@ -52,7 +52,7 @@ export default function LandfillOperation() {
                         </div>
                     }
                 </div >
-            </>
+            </div>
         )
     }
 }

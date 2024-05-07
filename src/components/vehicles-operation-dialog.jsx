@@ -123,7 +123,7 @@ export function VehiclesOperationDialog({ open, setOpen, data, add = false }) {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent className="sm:max-w-md w-auto">
+            <DialogContent className="sm:max-w-md w-auto h-[90vh] md:h-auto overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>{add ? "Add vehicle" : "Update vehicle"}</DialogTitle>
                 </DialogHeader>

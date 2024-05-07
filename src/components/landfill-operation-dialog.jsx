@@ -119,8 +119,8 @@ export function LandfillOperationDialog({ open, setOpen, data, add = false }) {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent className="flex gap-4 flex-wrap justify-center items-center md:flex-nowrap">
-                <div className="sm:max-w-md w-auto flex flex-col gap-3">
+            <DialogContent className="flex gap-4 flex-wrap justify-center items-center md:flex-nowrap h-[90vh] md:h-auto overflow-y-auto">
+                <div className="md:min-w-[250px] p-1 w-auto flex flex-col gap-3">
                     <DialogHeader>
                         <DialogTitle>{add ? "Add Landfill" : "Update"}</DialogTitle>
                     </DialogHeader>

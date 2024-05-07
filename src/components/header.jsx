@@ -70,7 +70,7 @@ const Header = () => {
                 },
             )}
         >
-            <div className="flex h-[47px] items-center justify-between px-4">
+            <div className="bg-white flex h-[47px] items-center justify-between px-4">
                 <div className="flex items-center space-x-4">
                     <Link
                         href="/ui/dashboard"
@@ -79,7 +79,7 @@ const Header = () => {
                         <span className="h-7 w-7 bg-zinc-300 rounded-lg" />
                         <span className="font-bold text-xl flex ">EcoSync</span>
                     </Link>
-                    <div className=' font-bold'>Welcome {username} ({role})</div>
+                    <div className='font-bold hidden sm:block md:text-base'>Welcome {username} ({role})</div>
                 </div>
 
                 <div className="hidden md:block">
@@ -90,7 +90,7 @@ const Header = () => {
                                 <AvatarFallback>CN</AvatarFallback>
                             </Avatar>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent className="w-56">
+                        <DropdownMenuContent className="w-56 mr-4">
                             <DropdownMenuLabel>My Account</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuGroup>

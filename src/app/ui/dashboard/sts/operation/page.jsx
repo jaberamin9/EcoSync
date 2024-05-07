@@ -48,9 +48,9 @@ export default function page() {
         });
 
         return (
-            <>
+            <div>
                 <span className="font-bold text-2xl">Secondary Transfer Stations Operation</span>
-                <div className="">
+                <div>
                     {isLoading ?
                         <div className="w-full h-[80vh] flex justify-center items-center">
                             <Loader2 className="ml-2 h-10 w-10 animate-spin" />
@@ -60,7 +60,7 @@ export default function page() {
                         </div>
                     }
                 </div >
-            </>
+            </div>
         )
     }
 }

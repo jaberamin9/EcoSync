@@ -1,10 +1,15 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { SIDENAV_ITEMS } from '@/constants';
 import { Icon } from '@iconify/react';
 import { motion, useCycle } from 'framer-motion';
+import {
+    Loader2,
+} from "lucide-react"
+import { ProfileDialog } from './profile-dialog';
+import { ResetPasswordDialog } from './reset-password-dialog';
 
 
 const sidebar = {
@@ -26,11 +31,34 @@ const sidebar = {
     },
 };
 
+async function logout() {
+    return fetch(`/api/auth/logout`, {
+        method: 'GET'
+    }).then(data => data.json())
+}
+
 const HeaderMobile = () => {
     const pathname = usePathname();
     const containerRef = useRef(null);
     const { height } = useDimensions(containerRef);
     const [isOpen, toggleOpen] = useCycle(false, true);
+    const [open, setOpen] = useState(false);
+    const [open2, setOpen2] = useState(false);
+    const [loading, setLoading] = useState(false)
+    const router = useRouter();
+
+    const handleSubmit = async e => {
+        setLoading(true)
+        e.preventDefault();
+
+        const res = await logout();
+        if (res.success) {
+            setLoading(false)
+            router.replace("/ui/login");
+            window.location.reload();
+        }
+        setLoading(false)
+    }
 
     return (
         <motion.nav
@@ -75,8 +103,25 @@ const HeaderMobile = () => {
                         </div>
                     );
                 })}
+                <MenuItem className='flex flex-col gap-3'>
+                    <div className="my-3 h-px w-full bg-gray-300"></div>
+                    <div className='cursor-pointer' onClick={() => setOpen(true)}>
+                        <span className='flex w-full text-2xl'>Profile</span>
+                    </div>
+                    <div className='cursor-pointer' onClick={() => setOpen2(true)}>
+                        <span className='flex w-full text-2xl'>Reset password</span>
+                    </div>
+                    <div className='cursor-pointer flex w-full items-center' onClick={handleSubmit}>
+                        <span className='flex text-2xl'>Log out </span>
+                        {loading ? <Loader2 className="ml-2 h-4 w-4 animate-spin" /> : ""}
+                    </div>
+                    <div className="my-3 h-px w-full bg-gray-300"></div>
+                </MenuItem>
+
             </motion.ul>
             <MenuToggle toggle={toggleOpen} />
+            <ProfileDialog open={open} setOpen={setOpen}></ProfileDialog>
+            <ResetPasswordDialog open={open2} setOpen={setOpen2}></ResetPasswordDialog>
         </motion.nav>
     );
 };

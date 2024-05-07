@@ -457,8 +457,8 @@ export function StsOperationDialog2({ open, setOpen, data, add = false }) {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent className="flex gap-4 flex-wrap md:flex-nowrap">
-                <div className="sm:max-w-md w-auto flex flex-col gap-3">
+            <DialogContent className="flex gap-4 flex-wrap md:flex-nowrap h-[90vh] md:h-auto overflow-y-auto">
+                <div className="md:min-w-[250px] p-1 w-auto flex flex-col gap-3">
                     <DialogHeader>
                         <DialogTitle>{add ? "Add STS" : "Update"}</DialogTitle>
                     </DialogHeader>
@@ -466,11 +466,11 @@ export function StsOperationDialog2({ open, setOpen, data, add = false }) {
                     <div className="flex gap-2">
                         <div className="grid w-auto items-center gap-1.5">
                             <Label htmlFor="disposed">Volume Collection</Label>
-                            <Input onChange={e => setVolume(e.target.value)} value={volume} className="w-[150px] h-9" type="number" placeholder="volume collection" />
+                            <Input onChange={e => setVolume(e.target.value)} value={volume} className="w-full h-9" type="number" placeholder="volume collection" />
                         </div>
                         <div className="grid w-auto items-center gap-1.5">
                             <Label htmlFor="disposed">Totla KiloMeter</Label>
-                            <Input onChange={e => setTotlaKiloMeter(e.target.value)} value={totlaKiloMeter} className="w-[150px] h-9 text-blue-500" type="number" placeholder="totla kiloMeter" />
+                            <Input onChange={e => setTotlaKiloMeter(e.target.value)} value={totlaKiloMeter} className="w-full h-9 text-blue-500" type="number" placeholder="totla kiloMeter" />
                         </div>
                     </div>
 

@@ -37,7 +37,7 @@ function padValue(value) {
 export function BillAndSlip({ open, setOpen, data }) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent className="sm:max-w-md w-auto">
+            <DialogContent className="sm:max-w-md w-auto h-[90vh] md:h-auto overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>Bill info</DialogTitle>
                 </DialogHeader>

@@ -60,7 +60,7 @@ export function DataTable({
     })
 
     return (
-        <div className="overflow-auto p-1">
+        <div className="overflow-x-auto p-1">
             <div className="flex items-center py-4">
                 <Input
                     placeholder="Filter Vehicle Id..."

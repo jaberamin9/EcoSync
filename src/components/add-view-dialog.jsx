@@ -109,14 +109,14 @@ export function AddViewDialog({ isUpdate, open, setOpen, wde, addWde = false }) 
             <DialogTrigger asChild>
                 {isUpdate ? "" : <Button className='ml-3' variant="outline">Add</Button>}
             </DialogTrigger>
-            <DialogContent className="sm:max-w-md w-auto">
+            <DialogContent className="sm:max-w-md flex flex-col gap-4 w-auto h-auto overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>{addWde ? "Add Wde" : "Update"}</DialogTitle>
                 </DialogHeader>
 
                 <div className="grid w-auto max-w-sm items-center gap-1.5">
                     <Label htmlFor="disposed">Volume Disposed</Label>
-                    <Input onChange={e => setVolume(e.target.value)} value={volume} className="w-[300px] h-9" type="number" placeholder="Volume Disposed" />
+                    <Input onChange={e => setVolume(e.target.value)} value={volume} className="w-full h-9" type="number" placeholder="Volume Disposed" />
                 </div>
 
 

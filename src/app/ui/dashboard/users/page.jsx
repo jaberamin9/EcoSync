@@ -104,9 +104,9 @@ export default function LandfillOperation() {
 
         console.log(data)
         return (
-            <>
+            <div>
                 <span className="font-bold text-2xl">User Operation</span>
-                <div className="">
+                <div>
                     {isLoading ?
                         <div className="w-full h-[80vh] flex justify-center items-center">
                             <Loader2 className="ml-2 h-10 w-10 animate-spin" />
@@ -115,7 +115,7 @@ export default function LandfillOperation() {
                             <div className='flex-1 mt-4 px-8 bg-white rounded-md shadow py-4'>
                                 <DataTable columns={columns} data={data} setUserId={setUserId} />
                             </div>
-                            <Card className="w-[350px] mt-4 h-fit">
+                            <Card className="lg:w-[350px] w-full mt-4 h-fit">
                                 <CardHeader>
                                     <CardTitle>Assign Role</CardTitle>
                                 </CardHeader>
@@ -148,7 +148,7 @@ export default function LandfillOperation() {
                             </Card>
                         </div>}
                 </div >
-            </>
+            </div>
         )
     }
 }
