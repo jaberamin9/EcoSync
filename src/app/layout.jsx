@@ -6,6 +6,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
     title: "EcoSync",
     description: "Aiming to address waste management challenges in urban areas, EcoSync, a web application, is introduced by the local municipal authority.",
+    icons: {
+        icon: '/logo.png',
+    },
 };
 
 export default function RootLayout({ children }) {

@@ -150,7 +150,7 @@ function StsManager() {
                         <span className='text-2xl font-semibold leading-none tracking-tight'>{totalTrip}</span>
                     </diV>
                 </div>
-                <div className="flex flex-col lg:flex-row gap-4 w-full flex-wrap">
+                <div className="flex flex-col lg:flex-row gap-4 w-full flex-wrap pb-2">
                     <div className='flex-1 h-[400px] bg-white rounded-xl p-4 shadow-md'>
                         <BarChart chartData={chartData} text="Last 7 day's waste collection" />
                     </div>
