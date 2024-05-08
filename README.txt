@@ -6,6 +6,22 @@ EcoSync is a web app for DNCC's waste management. It offers features like user m
 2.EcoSync offers a range of features including user management, route optimization, billing, and real-time dashboard statistics to improve waste collection, transportation, and processing efficiency in the city.
 
 
+----------------------------------------------
+How to run:
+1. npm install next
+2. npm run dev
+3. email :admin@gmail.com
+   pass  :admin
+
+for otp:
+https://mailtrap.io/
+
+use this google account
+email: code37969@gmail.com
+pass: code(12)
+----------------------------------------------
+
+
 Bug list:
 
 Bug-1:
