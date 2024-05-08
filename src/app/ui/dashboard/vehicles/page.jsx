@@ -18,7 +18,7 @@ export default function LandfillOperation() {
             return fetch(`/api/vehicles`, {
                 method: 'GET'
             }).then(data => data.json()).then(data => {
-                const newData = data.vehicles.reverse().map(item => {
+                const newData = data.data.reverse().map(item => {
                     return {
                         id: item._id,
                         vehicleId: item.vehicleId,

@@ -12,11 +12,11 @@ export async function PUT(req, context) {
         if (logedInUser.role != "System Admin") {
             const { isFree } = await req.json()
 
-            if (!mongoose.Types.ObjectId.isValid(context.params.vehicleId)) return NextResponse.json({ success: false, error: "Vehicle not exists" }, { status: 400 })
+            if (!mongoose.Types.ObjectId.isValid(context.params.vehicleId)) return NextResponse.json({ success: false, message: "Vehicle not exists" }, { status: 400 })
 
             const vehicle = await Vehicle.findOneAndUpdate({ _id: context.params.vehicleId }, { isFree }, { returnDocument: "after" })
 
-            if (!vehicle) return NextResponse.json({ success: false, error: "Vehicle not exists" }, { status: 400 })
+            if (!vehicle) return NextResponse.json({ success: false, message: "Vehicle not exists" }, { status: 400 })
             return NextResponse.json({
                 success: true,
                 message: "Vehicle update successfully",
@@ -26,11 +26,11 @@ export async function PUT(req, context) {
 
         const reqBody = await req.json()
 
-        if (!mongoose.Types.ObjectId.isValid(context.params.vehicleId)) return NextResponse.json({ success: false, error: "Vehicle not exists" }, { status: 400 })
+        if (!mongoose.Types.ObjectId.isValid(context.params.vehicleId)) return NextResponse.json({ success: false, message: "Vehicle not exists" }, { status: 400 })
 
         const vehicle = await Vehicle.findOneAndUpdate({ _id: context.params.vehicleId }, reqBody, { returnDocument: "after" })
 
-        if (!vehicle) return NextResponse.json({ success: false, error: "Vehicle not exists" }, { status: 400 })
+        if (!vehicle) return NextResponse.json({ success: false, message: "Vehicle not exists" }, { status: 400 })
 
         return NextResponse.json({
             success: true,
@@ -38,7 +38,7 @@ export async function PUT(req, context) {
             data: vehicle
         }, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 })
     }
 }
 
@@ -46,20 +46,20 @@ export async function DELETE(req, context) {
     try {
         const logedInUser = await getDataFromToken(req);
         if (logedInUser.role != "System Admin") {
-            return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 })
         }
 
-        if (!mongoose.Types.ObjectId.isValid(context.params.vehicleId)) return NextResponse.json({ success: false, error: "Vehicle not exists" }, { status: 400 })
+        if (!mongoose.Types.ObjectId.isValid(context.params.vehicleId)) return NextResponse.json({ success: false, message: "Vehicle not exists" }, { status: 400 })
 
         const vehicle = await Vehicle.findByIdAndDelete({ _id: context.params.vehicleId })
 
-        if (!vehicle) return NextResponse.json({ success: false, error: "Vehicle not exists" }, { status: 400 })
+        if (!vehicle) return NextResponse.json({ success: false, message: "Vehicle not exists" }, { status: 400 })
 
         return NextResponse.json({
             success: true,
             message: `Successfully deleted vehicle ${context.params.vehicleId}`
         }, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 })
     }
 }

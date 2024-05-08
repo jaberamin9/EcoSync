@@ -55,6 +55,7 @@ const Header = () => {
         if (res.success) {
             setLoading(false)
             router.replace("/ui/login");
+            localStorage.clear()
             window.location.reload();
         }
         setLoading(false)

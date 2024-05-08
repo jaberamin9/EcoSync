@@ -61,7 +61,7 @@ export function AssignPermissionsOperationDialog({ open, setOpen, data, add = fa
             setOpen(false)
             queryClient.invalidateQueries({ queryKey: ['rbac'] })
         } else {
-            setError(res.error)
+            setError(res.message)
             setLoading(false)
         }
     }
@@ -70,7 +70,7 @@ export function AssignPermissionsOperationDialog({ open, setOpen, data, add = fa
         async function fetchData() {
             let res = await getPermissions();
             if (res.success) {
-                const data = res.permission.map(item => {
+                const data = res.data.map(item => {
                     return {
                         value: item._id,
                         label: item.permissionsName,

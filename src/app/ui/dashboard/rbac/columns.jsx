@@ -15,12 +15,6 @@ import { useState } from "react";
 import { RbacOperationDialog } from "@/components/rbac-operation-dialog";
 import { AssignPermissionsOperationDialog } from "@/components/assign-permission-operation-dialog";
 
-async function getBill(id) {
-    return fetch(`/api/wde/${id}/bill`, {
-        method: 'GET'
-    }).then(data => data.json())
-}
-
 
 export const columns = [
     {
@@ -55,7 +49,6 @@ export const columns = [
             )
         },
         cell: ({ row }) => {
-            console.log(row)
             return <div className="text-center">{row.getValue("permissions") != "" ? row.getValue("permissions") : "Not assigned"}</div>
         },
     },
@@ -66,17 +59,8 @@ export const columns = [
             const { toast } = useToast()
             const [open, setOpen] = useState(false);
             const [openDialog, setOpenDialog] = useState(false);
-            const [biiDialog, setBiiDialog] = useState(false);
             const landfill = row.original
 
-            const [data, setData] = useState()
-            const handleSubmit = async () => {
-                const res = await getBill(landfill.id);
-                if (res.success) {
-                    setData(res.data)
-                    setBiiDialog(true)
-                }
-            }
 
             const mutation = useMutation({
                 mutationFn: async (id) => {
@@ -117,8 +101,12 @@ export const columns = [
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <RbacOperationDialog open={open} setOpen={setOpen} data={landfill}></RbacOperationDialog>
-                    <AssignPermissionsOperationDialog open={openDialog} setOpen={setOpenDialog} data={landfill}></AssignPermissionsOperationDialog>
+                    {open ? <RbacOperationDialog open={open} setOpen={setOpen} data={landfill}></RbacOperationDialog>
+                        : ""
+                    }
+                    {openDialog ? <AssignPermissionsOperationDialog open={openDialog} setOpen={setOpenDialog} data={landfill}></AssignPermissionsOperationDialog>
+                        : ""
+                    }
                 </>
             )
         },

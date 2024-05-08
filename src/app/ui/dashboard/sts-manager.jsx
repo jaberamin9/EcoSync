@@ -56,20 +56,20 @@ function StsManager() {
             if (res.success) {
 
                 let sumVolumeDisposed = 0, sumTotalKiloMeter = 0, Capecity = 0;
-                res.wce.forEach(obj => {
+                res.data.forEach(obj => {
                     sumVolumeDisposed += obj.volumeCollection
                     sumTotalKiloMeter += obj.totlaKiloMeter
                     Capecity = obj.stsId.capacity
                 });
                 setVolumeDisposed(sumVolumeDisposed)
                 setTotalKiloMeter(sumTotalKiloMeter)
-                setTotalTrip(res.wce.length)
+                setTotalTrip(res.data.length)
                 setCapecity(Capecity)
 
                 const sevenDaysAgo = new Date();
                 sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-                const filteredData = res.wce.filter(obj => new Date(obj.createdAt) >= sevenDaysAgo);
+                const filteredData = res.data.filter(obj => new Date(obj.createdAt) >= sevenDaysAgo);
 
 
                 let tableData = filteredData.slice(-8);

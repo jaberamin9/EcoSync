@@ -18,7 +18,7 @@ export default function RbacOperation() {
             return fetch(`/api/rbac/roles`, {
                 method: 'GET'
             }).then(data => data.json()).then(data => {
-                const newData = data.roles.reverse().map(item => {
+                const newData = data.data.reverse().map(item => {
                     return {
                         id: item._id,
                         roles: item.role,

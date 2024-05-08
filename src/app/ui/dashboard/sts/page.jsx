@@ -7,7 +7,7 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 
-export default function LandfillOperation() {
+export default function Page() {
     const router = useRouter()
 
     const role = localStorage.getItem('role');
@@ -18,7 +18,7 @@ export default function LandfillOperation() {
             return fetch(`/api/sts`, {
                 method: 'GET'
             }).then(data => data.json()).then(data => {
-                const newData = data.sts.reverse().map(item => {
+                const newData = data.data.reverse().map(item => {
                     return {
                         id: item._id,
                         wardNumber: item.wardNumber,

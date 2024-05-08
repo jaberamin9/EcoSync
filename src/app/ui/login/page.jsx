@@ -2,7 +2,6 @@
 import { useState } from "react";
 import Image from 'next/image'
 import pic from '../../../../public/medium.png'
-
 import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -41,17 +40,17 @@ export default function Home() {
     const handleSubmit = async () => {
         setLoading(true)
 
-        const token = await loginUser({
+        const response = await loginUser({
             email: inputField.email,
             password: inputField.password
         });
-        if (token.success) {
+        if (response.success) {
             setLoading(false)
-            localStorage.setItem('role', token.role);
-            localStorage.setItem('name', token.name);
+            localStorage.setItem('role', response.role);
+            localStorage.setItem('name', response.name);
             router.replace("/ui/dashboard");
         } else {
-            setError(token.error)
+            setError(response.message)
             setLoading(false)
         }
     }
@@ -83,7 +82,7 @@ export default function Home() {
                                 </div>
                             </form>
                         </CardContent>
-                        {error != "" ? <p className="text-[11px] bg-red-100 p-1 rounded-md mx-6 text-center">{error}</p> : ""}
+                        {error != "" ? <p className="text-[11px] bg-red-100 p-1 rounded-md mx-4 text-center">{error}</p> : ""}
                         <CardFooter className="pt-2 flex justify-between">
                             <Button className='flex-1' variant="custom" onClick={handleSubmit} type="submit" disabled={loading}>
                                 Login

@@ -10,14 +10,14 @@ export async function GET(req) {
         const userId = await getDataFromToken(req);
         const logInUser = await User.findOne({ _id: userId.id }).select(["-password", "-otpSecretKey", "-__v"]);
         if (!logInUser) {
-            return NextResponse.json({ success: false, error: "you are not log in" }, { status: 400 })
+            return NextResponse.json({ success: false, message: "you are not log in" }, { status: 400 })
         }
         return NextResponse.json({
             success: true,
             data: logInUser
         })
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 400 });
+        return NextResponse.json({ success: false, message: error.message }, { status: 400 });
     }
 
 }

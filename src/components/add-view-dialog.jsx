@@ -93,14 +93,17 @@ export function AddViewDialog({ isUpdate, open, setOpen, wde, addWde = false }) 
                     setLoading(false)
                     setOpen(false)
                     queryClient.invalidateQueries({ queryKey: ['insertWde'] })
+                } else {
+                    setError(update_status.message)
                 }
             } else {
                 setLoading(false)
                 setOpen(false)
                 queryClient.invalidateQueries({ queryKey: ['wde'] })
             }
+        } else {
+            setError(res.message)
         }
-        setError(res.error)
         setLoading(false)
     }
 
@@ -109,7 +112,7 @@ export function AddViewDialog({ isUpdate, open, setOpen, wde, addWde = false }) 
             <DialogTrigger asChild>
                 {isUpdate ? "" : <Button className='ml-3' variant="outline">Add</Button>}
             </DialogTrigger>
-            <DialogContent className="sm:max-w-md flex flex-col gap-4 w-auto h-auto overflow-y-auto">
+            <DialogContent className="sm:max-w-md flex flex-col gap-4 w-auto h-auto">
                 <DialogHeader>
                     <DialogTitle>{addWde ? "Add Wde" : "Update"}</DialogTitle>
                 </DialogHeader>

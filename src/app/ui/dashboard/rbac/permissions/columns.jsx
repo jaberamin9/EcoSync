@@ -15,14 +15,6 @@ import { useState } from "react";
 import { PermissionsOperationDialog } from "@/components/permission-operation-dialog";
 
 
-async function getBill(id) {
-    return fetch(`/api/wde/${id}/bill`, {
-        method: 'GET'
-    }).then(data => data.json())
-}
-
-
-
 export const columns = [
     {
         accessorKey: "permissionsName",
@@ -65,17 +57,9 @@ export const columns = [
             const queryClient = useQueryClient();
             const { toast } = useToast()
             const [open, setOpen] = useState(false);
-            const [biiDialog, setBiiDialog] = useState(false);
             const landfill = row.original
 
-            const [data, setData] = useState()
-            const handleSubmit = async () => {
-                const res = await getBill(landfill.id);
-                if (res.success) {
-                    setData(res.data)
-                    setBiiDialog(true)
-                }
-            }
+
 
             const mutation = useMutation({
                 mutationFn: async (id) => {
@@ -116,7 +100,9 @@ export const columns = [
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <PermissionsOperationDialog open={open} setOpen={setOpen} data={landfill}></PermissionsOperationDialog>
+                    {open ? <PermissionsOperationDialog open={open} setOpen={setOpen} data={landfill}></PermissionsOperationDialog>
+                        : ""
+                    }
                 </>
             )
         },

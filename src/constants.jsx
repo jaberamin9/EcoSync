@@ -1,7 +1,6 @@
 'use client';
 import { Icon } from '@iconify/react';
 
-
 export let SIDENAV_ITEMS
 
 const role = localStorage.getItem('role');

@@ -54,7 +54,7 @@ export function ProfileDialog({ open, setOpen }) {
             setLoading(false)
             setEdit(pre => !pre)
         } else {
-            setError(res.error)
+            setError(res.message)
             setLoading(false)
         }
     }

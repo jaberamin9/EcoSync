@@ -31,6 +31,7 @@ export function ResetPasswordDialog({ open, setOpen }) {
     const [newPassword, setNewPassword] = useState("")
 
     const [error, setError] = useState("")
+    const [success, setSuccess] = useState("")
     const [loading, setLoading] = useState(false)
 
 
@@ -38,14 +39,15 @@ export function ResetPasswordDialog({ open, setOpen }) {
         e.preventDefault()
         setLoading(true)
 
-        const res = await resetPassword({ oldPassword, newPassword });
-        if (res.success) {
-            setError(res.message)
-            setLoading(false)
+        const response = await resetPassword({ oldPassword, newPassword });
+        if (response.success) {
+            setSuccess(response.message)
+            setError('')
         } else {
-            setError(res.error)
-            setLoading(false)
+            setError(response.message)
+            setSuccess('')
         }
+        setLoading(false)
     }
 
     return (
@@ -59,8 +61,7 @@ export function ResetPasswordDialog({ open, setOpen }) {
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="oldPassword" className="text-right">Old Password</Label>
                         <Input
-                            id="name"
-                            defaultValue="Pedro Duarte"
+                            type='password'
                             value={oldPassword}
                             onChange={e => setOldPassword(e.target.value)}
                             className="col-span-3"
@@ -69,14 +70,14 @@ export function ResetPasswordDialog({ open, setOpen }) {
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="newPassword" className="text-right">New Password</Label>
                         <Input
-                            id="name"
-                            defaultValue="Pedro Duarte"
+                            type='password'
                             value={newPassword}
                             onChange={e => setNewPassword(e.target.value)}
                             className="col-span-3"
                         />
                     </div>
-                    {error != "" ? <p className="text-[11px] bg-red-100 p-1 rounded-md mx-2 text-center">{error}</p> : ""}
+                    {error != "" ? <p className="text-[11px] bg-red-100 p-1 rounded-md text-center">{error}</p> : ""}
+                    {success != "" ? <p className="text-[11px] bg-green-100 p-1 rounded-md text-center">{success}</p> : ""}
 
                 </div>
 

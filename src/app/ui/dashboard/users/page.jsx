@@ -56,7 +56,7 @@ export default function LandfillOperation() {
         const handleSubmit = async () => {
             const res = await getRole();
             if (res.success) {
-                const newData = res.roles.map((item) => {
+                const newData = res.data.map((item) => {
                     return {
                         value: item.role,
                         label: item.role
@@ -64,8 +64,9 @@ export default function LandfillOperation() {
                 })
                 setRoleList(newData)
                 setError("")
+            } else {
+                setError(res.message)
             }
-            setError(res.error)
         }
 
         const handleSubmitForAssignRole = async () => {
@@ -77,8 +78,9 @@ export default function LandfillOperation() {
                 queryClient.invalidateQueries({ queryKey: ['users'] })
                 setLoading(false)
                 setError("")
+            } else {
+                setError(res.message)
             }
-            setError(res.error)
             setLoading(false)
         }
 
@@ -86,7 +88,7 @@ export default function LandfillOperation() {
             return fetch(`/api/users`, {
                 method: 'GET'
             }).then(data => data.json()).then(data => {
-                const newData = data.users.reverse().map(item => {
+                const newData = data.data.reverse().map(item => {
                     return {
                         id: item._id,
                         username: item.username,
@@ -102,7 +104,6 @@ export default function LandfillOperation() {
             queryFn: fetchWdeData,
         });
 
-        console.log(data)
         return (
             <div>
                 <span className="font-bold text-2xl">User Operation</span>

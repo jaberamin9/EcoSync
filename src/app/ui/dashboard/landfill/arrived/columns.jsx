@@ -216,8 +216,12 @@ export const columns = [
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <AddViewDialog open={open} isUpdate={true} setOpen={setOpen} wde={wde}></AddViewDialog>
-                    <BillAndSlip open={biiDialog} isUpdate={true} setOpen={setBiiDialog} data={data}></BillAndSlip>
+                    {open ? <AddViewDialog open={open} isUpdate={true} setOpen={setOpen} wde={wde}></AddViewDialog>
+                        : ""
+                    }
+                    {biiDialog ? <BillAndSlip open={biiDialog} isUpdate={true} setOpen={setBiiDialog} data={data}></BillAndSlip>
+                        : ""
+                    }
 
                 </>
             )

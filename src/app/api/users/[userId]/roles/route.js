@@ -10,23 +10,22 @@ export async function PUT(req, context) {
     try {
         const logedInUser = await getDataFromToken(req);
         if (logedInUser.role != "System Admin") {
-            return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 })
         }
 
         const reqBody = await req.json()
 
-        if (!mongoose.Types.ObjectId.isValid(context.params.userId)) return NextResponse.json({ success: false, error: "User not exists" }, { status: 400 })
+        if (!mongoose.Types.ObjectId.isValid(context.params.userId)) return NextResponse.json({ success: false, message: "User not exists" }, { status: 400 })
 
         const user = await User.findOneAndUpdate({ _id: context.params.userId }, reqBody)
 
-        if (!user) return NextResponse.json({ success: false, error: "User not exists" }, { status: 400 })
+        if (!user) return NextResponse.json({ success: false, message: "User not exists" }, { status: 400 })
 
         return NextResponse.json({
             success: true,
             message: `Successfully updating a user id (${context.params.userId}) role from ${user.roles} to ${reqBody.roles}`
-
         }, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 })
     }
 }

@@ -16,22 +16,21 @@ export async function GET(req, context) {
         const logedInUser = await getDataFromToken(req);
         //only access System Admin and Landfill Manager
         if (logedInUser.role === "STS Manager") {
-            return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 })
         }
 
-        if (!mongoose.Types.ObjectId.isValid(context.params.wdeId)) return NextResponse.json({ success: false, error: "WDE not exists" }, { status: 400 })
+        if (!mongoose.Types.ObjectId.isValid(context.params.wdeId)) return NextResponse.json({ success: false, message: "WDE not exists" }, { status: 400 })
 
         const wde = await Wde.find({ _id: context.params.wdeId }).select("-__v")
             .populate({ path: 'stsId', select: '-__v', model: Sts })
             .populate({ path: 'vehicleId', select: '-__v -_id -stsId', model: Vehicle })
             .populate({ path: 'landfillId', select: '-__v', model: Landfill });
 
-        if (!wde) return NextResponse.json({ success: false, error: "WDE not exists" }, { status: 400 })
+        if (!wde) return NextResponse.json({ success: false, message: "WDE not exists" }, { status: 400 })
 
         const costPerKilometer = (wde[0].vehicleId.fuelcostUnloaded + (wde[0].volumeDisposed / wde[0].vehicleId.capacity) * (wde[0].vehicleId.fuelcostLoaded - wde[0].vehicleId.fuelcostUnloaded))
         const totalFuelCost = costPerKilometer * wde[0].totlaKiloMeter
 
-        console.log(wde)
         const res = {
             time: new Date(),
             truckDetails: wde[0].vehicleId,
@@ -46,6 +45,6 @@ export async function GET(req, context) {
             data: res
         }, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 })
     }
 }

@@ -133,7 +133,9 @@ export const columns = [
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <UserOperationDialog open={open} setOpen={setOpen} data={users}></UserOperationDialog>
+                    {open ? <UserOperationDialog open={open} setOpen={setOpen} data={users}></UserOperationDialog>
+                        : ""
+                    }
                 </>
             )
         },

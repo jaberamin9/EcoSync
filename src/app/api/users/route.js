@@ -13,7 +13,7 @@ export async function GET(req) {
     try {
         const logedInUser = await getDataFromToken(req);
         if (logedInUser.role != "System Admin") {
-            return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 })
         }
 
         const userType = String(req.nextUrl.searchParams)
@@ -26,10 +26,10 @@ export async function GET(req) {
         users = users.map(({ _doc: { __v, password, otpSecretKey, forgotPasswordToken, forgotPasswordTokenExpiry, ...rest } }) => rest)
         return NextResponse.json({
             success: true,
-            users
+            data: users
         }, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 })
     }
 }
 
@@ -37,17 +37,21 @@ export async function POST(req) {
     try {
         const logedInUser = await getDataFromToken(req);
         if (logedInUser.role != "System Admin") {
-            return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 })
         }
 
         const reqBody = await req.json()
         const { username, email, password } = reqBody
 
+        if (!username || !email || !password) {
+            return NextResponse.json({ success: false, message: "field are missing" }, { status: 400 })
+        }
+
         //check if user already exists
         const user = await User.findOne({ email })
 
         if (user) {
-            return NextResponse.json({ success: false, error: "User already exists" }, { status: 400 })
+            return NextResponse.json({ success: false, message: "User already exists" }, { status: 400 })
         }
 
         //hash password
@@ -73,7 +77,7 @@ export async function POST(req) {
             message: "Registration success: please ask the user to check their email"
         }, { status: 201 })
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 })
     }
 }
 

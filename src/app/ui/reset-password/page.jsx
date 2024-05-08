@@ -4,7 +4,6 @@ import Image from 'next/image'
 import findEmailImg from '../../../../public/findemail.png'
 import otpImg from '../../../../public/otpimage.png'
 import newPasswordImg from '../../../../public/newpasswordimg.png'
-
 import {
     InputOTP,
     InputOTPGroup,
@@ -23,7 +22,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 
 
 async function confirmOtp(credentials) {
@@ -69,38 +67,36 @@ export default function Home() {
         e.preventDefault();
 
         if (otpView == 2) {
-            const res = await resetPassword({
+            const response = await resetPassword({
                 password,
                 resetToken
             });
-            if (res.success) {
+            if (response.success) {
                 router.replace("/ui/login");
             } else {
-                setError(res.error)
+                setError(response.message)
             }
-            console.log(email, password, resetToken)
         } else if (otpView == 1) {
-            const res = await confirmOtp({
+            const response = await confirmOtp({
                 email,
                 otp: otpCode
             });
-            if (res.success) {
+            if (response.success) {
                 setOtpView(2)
                 setError("")
-                setResetToken(res.resetToken)
+                setResetToken(response.resetToken)
             } else {
-                setError(res.error)
+                setError(response.message)
             }
         } else {
-            const res = await sendOtp({
+            const response = await sendOtp({
                 email
             });
-            console.log(res)
-            if (res.success) {
+            if (response.success) {
                 setOtpView(1)
                 setError("")
             } else {
-                setError(res.error)
+                setError(response.message)
             }
         }
 
@@ -137,7 +133,7 @@ export default function Home() {
                                     </div>
                                 </form>
                             </CardContent>
-                            {error != "" ? <p className="text-[11px] bg-red-100 p-1 rounded-md mx-6 text-center">{error}</p> : ""}
+                            {error != "" ? <p className="text-[11px] bg-red-100 p-1 rounded-md mx-4 text-center">{error}</p> : ""}
                             <CardFooter className="pt-2 flex justify-between">
                                 <Button variant="custom2" onClick={handleSubmit} type="submit" disabled={loading}>
                                     Send Code
@@ -178,7 +174,7 @@ export default function Home() {
                                     </InputOTPGroup>
                                 </InputOTP>
                             </CardContent>
-                            {error != "" ? <p className="text-[11px] bg-red-100 p-1 rounded-md mx-6 text-center">{error}</p> : ""}
+                            {error != "" ? <p className="text-[11px] bg-red-100 p-1 rounded-md mx-4 text-center">{error}</p> : ""}
                             <CardFooter className="pt-2 flex justify-between">
                                 <Button className='w-full' variant="custom" onClick={handleSubmit} type="submit" disabled={loading}>
                                     Verify
@@ -214,7 +210,7 @@ export default function Home() {
                                     </div>
                                 </form>
                             </CardContent>
-                            {error != "" ? <p className="text-[11px] bg-red-100 p-1 rounded-md mx-6 text-center">{error}</p> : ""}
+                            {error != "" ? <p className="text-[11px] bg-red-100 p-1 rounded-md mx-4 text-center">{error}</p> : ""}
                             <CardFooter className="pt-2 flex justify-between">
                                 <Button variant="custom" onClick={handleSubmit} type="submit" disabled={loading}>
                                     Reset Password

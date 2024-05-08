@@ -18,7 +18,7 @@ export default function DemoPage() {
             return fetch(`/api/wde`, {
                 method: 'GET'
             }).then(data => data.json()).then(data => {
-                const newData = data.wde.reverse().map(item => {
+                const newData = data.data.reverse().map(item => {
                     return {
                         id: item._id,
                         sts: item.stsId.wardNumber,

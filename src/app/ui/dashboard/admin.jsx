@@ -47,10 +47,10 @@ function Admin() {
         }).then(data => data.json()).then(data => {
             const daysOfWeek = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
             const result = daysOfWeek.map(day => {
-                const existingData = data.result.find(item => item.day === day);
+                const existingData = data.data.find(item => item.day === day);
                 return existingData ? existingData : { volumeCollection: 0, day };
             });
-            data.result = result;
+            data.data = result;
             return data
         })
     };
@@ -64,11 +64,11 @@ function Admin() {
         if (!isLoading) {
             setChartData(
                 {
-                    labels: data.result.map((data) => data.day),
+                    labels: data.data.map((data) => data.day),
                     datasets: [
                         {
                             label: "Total waste collection",
-                            data: data.result.map((data) => data.volumeCollection),
+                            data: data.data.map((data) => data.volumeCollection),
                             backgroundColor: [
                                 "#9DBD4C",
                             ],
@@ -86,15 +86,15 @@ function Admin() {
         async function fetchData() {
             let res = await getSts();
             if (res.success) {
-                res.wce.map((item, idx) => {
+                res.data.map((item, idx) => {
                     setTotalKiloMeter((pev) => pev + item.totlaKiloMeter)
                     setVolumeCollection((pev) => pev + item.volumeCollection)
                     return
                 })
-                setTotalTrip(res.wce.length)
+                setTotalTrip(res.data.length)
 
 
-                let newData = res.wce.slice(-8);
+                let newData = res.data.slice(-8);
                 newData = newData.map((item, idx) => {
                     return {
                         id: item._id,

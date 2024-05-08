@@ -25,7 +25,7 @@ export async function GET(req) {
 
             return NextResponse.json({
                 success: true,
-                wce: newWce,
+                data: newWce,
             }, { status: 200 })
         }
 
@@ -41,7 +41,7 @@ export async function GET(req) {
 
             return NextResponse.json({
                 success: true,
-                wce: newWce,
+                data: newWce,
             }, { status: 200 })
         }
 
@@ -95,7 +95,7 @@ export async function GET(req) {
 
             return NextResponse.json({
                 success: true,
-                result
+                data: result
             }, { status: 200 })
         }
 
@@ -105,10 +105,10 @@ export async function GET(req) {
 
         return NextResponse.json({
             success: true,
-            wce
+            data: wce
         }, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 })
     }
 }
 
@@ -118,11 +118,16 @@ export async function POST(req) {
         const logedInUser = await getDataFromToken(req);
         //only access System Admin and STS Manager
         if (logedInUser.role === "Landfill Manager") {
-            return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 })
         }
 
         const reqBody = await req.json()
         const { stsId, vehicleId, landfillId, volumeCollection, arrivalTime, departureTime, totlaKiloMeter } = reqBody
+
+        if (!stsId || !vehicleId || !landfillId || !volumeCollection || !arrivalTime || !departureTime || !totlaKiloMeter) {
+            return NextResponse.json({ success: false, message: "field are missing" }, { status: 400 })
+        }
+
         const isInsertMany = reqBody.insertMany || false
 
         if (isInsertMany) {
@@ -163,7 +168,7 @@ export async function POST(req) {
             }, { status: 201 })
         }
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 })
     }
 }
 

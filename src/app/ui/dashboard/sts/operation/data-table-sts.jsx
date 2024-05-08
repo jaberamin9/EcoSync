@@ -162,7 +162,6 @@ export function DataTable({
                 </Button>
             </div>
             <StsOperationDialog2 open={open} setOpen={setOpen} data={""} add={true}></StsOperationDialog2>
-
         </div >
     )
 }

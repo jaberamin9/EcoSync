@@ -7,7 +7,7 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 
-export default function page() {
+export default function Page() {
     const router = useRouter()
 
     const role = localStorage.getItem('role');
@@ -18,7 +18,7 @@ export default function page() {
             return fetch(`/api/wce`, {
                 method: 'GET'
             }).then(data => data.json()).then(data => {
-                const newData = data.wce.reverse().map(item => {
+                const newData = data.data.reverse().map(item => {
                     return {
                         id: item._id,
                         stsId: item.stsId._id,
@@ -39,6 +39,8 @@ export default function page() {
                         fuelcostLoaded: item.vehicleId.fuelcostLoaded,
                     }
                 })
+                console.log(newData)
+
                 return newData
             })
         };

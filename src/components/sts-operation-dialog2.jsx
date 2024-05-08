@@ -63,6 +63,20 @@ async function getVehicles() {
     }).then(data => data.json())
 }
 
+async function Delete(id, volume) {
+    return await fetch(`/api/landfill/${id}${localStorage.getItem('role') ? '/?update=updateCapacity' : ''}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ capacity: -volume })
+    }).then(async data => {
+        return await fetch(`/api/wce/${id}`, {
+            method: 'DELETE'
+        }).then(data => data.json())
+    })
+}
+
 async function getLandfill() {
     return fetch(`/api/landfill`, {
         method: 'GET'
@@ -74,8 +88,8 @@ async function getStsID() {
     }).then(data => data.json())
 }
 
-async function updateCurrentLandfillCapacity(credentials, id) {
-    return fetch(`/api/landfill/${id}`, {
+async function updateCurrentLandfillCapacity(credentials, id, updateCapacity = false) {
+    return fetch(`/api/landfill/${id}${updateCapacity ? '/?update=updateCapacity' : ''}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -85,11 +99,13 @@ async function updateCurrentLandfillCapacity(credentials, id) {
 }
 
 export function StsOperationDialog2({ open, setOpen, data, add = false }) {
+
     const [arrivalTime, setArrivalTime] = useState(add ? new Date() : (data) ? data.arrivalTime : "")
     const [departureTime, setDepartureTime] = useState(add ? new Date() : (data) ? data.departureTime : "")
     const [volume, setVolume] = useState((add) ? "" : (data) ? data.volumeCollection : "")
 
     const [tempVolume, setTempVolume] = useState((add) ? "" : (data) ? data.volumeCollection : "")
+    const [tempLandfillId, setTempLandfillId] = useState((add) ? "" : (data) ? data.landfill_id : "")
     const [totlaKiloMeter, setTotlaKiloMeter] = useState(add ? "" : (data) ? data.totlaKiloMeter : "")
     const [stsID, setStsID] = useState("")
     const [stsLocation, setStsLocation] = useState((data) ? data.stsLocation : "")
@@ -122,6 +138,11 @@ export function StsOperationDialog2({ open, setOpen, data, add = false }) {
         setLoading(true)
         let res
         if (add) {
+            if (landfillSelected === '') {
+                setError("please select landfill")
+                setLoading(false)
+                return
+            }
             let updateCapacity
             if (isSingleVehicle) {
                 updateCapacity = await updateCurrentLandfillCapacity({
@@ -161,23 +182,34 @@ export function StsOperationDialog2({ open, setOpen, data, add = false }) {
 
                 if (res.success) {
                     setLoading(false)
-                    setOpen(false)
                     queryClient.invalidateQueries({ queryKey: ['wcemeneger'] })
+                    setError('')
+                    setOpen(false)
                 } else {
-                    setError(res.error)
+                    setError(res.message)
                     setLoading(false)
                 }
             } else {
-                setError(updateCapacity.error)
+                setError(updateCapacity.message)
                 setLoading(false)
             }
         } else {
-            const updateCapacity = await updateCurrentLandfillCapacity({
-                capacity: -(Number(tempVolume) - Number(volume))
-            }, landfillSelected);
+            let updateCapacity
+            if (tempLandfillId !== landfillSelected) {
+                Delete(tempLandfillId, tempVolume)
+                updateCapacity = await updateCurrentLandfillCapacity({
+                    capacity: Number(volume)
+                }, landfillSelected, (localStorage.getItem('role') === 'System Admin'));
+            } else {
+                updateCapacity = await updateCurrentLandfillCapacity({
+                    capacity: -(Number(tempVolume) - Number(volume))
+                }, landfillSelected, (localStorage.getItem('role') === 'System Admin'));
+            }
+
 
             if (updateCapacity.success) {
                 setTempVolume(volume)
+                setTempLandfillId(landfillSelected)
                 res = await updateWce({
                     stsId: data.stsId,
                     vehicleId: vehiclesSelected,
@@ -192,11 +224,11 @@ export function StsOperationDialog2({ open, setOpen, data, add = false }) {
                     setOpen(false)
                     queryClient.invalidateQueries({ queryKey: ['wcemeneger'] })
                 } else {
-                    setError(res.error)
+                    setError(res.message)
                     setLoading(false)
                 }
             } else {
-                setError(updateCapacity.error)
+                setError(updateCapacity.message)
                 setLoading(false)
             }
         }
@@ -206,8 +238,8 @@ export function StsOperationDialog2({ open, setOpen, data, add = false }) {
         async function fetchData() {
             let res = await getVehicles();
             if (res.success) {
-                setAllVehicles(res.vehicles)
-                let data = res.vehicles.sort(function (item1, item2) {
+                setAllVehicles(res.data)
+                let data = res.data.sort(function (item1, item2) {
                     const costPerKilometer1 = (item1.fuelcostUnloaded + (volume / item1.capacity) * (item1.fuelcostLoaded - item1.fuelcostUnloaded))
                     const costPerKilometer2 = (item2.fuelcostUnloaded + (volume / item2.capacity) * (item2.fuelcostLoaded - item2.fuelcostUnloaded))
                     return costPerKilometer1 - costPerKilometer2
@@ -236,9 +268,9 @@ export function StsOperationDialog2({ open, setOpen, data, add = false }) {
         async function fetchData() {
             let res = await getStsID();
             if (res.success) {
-                setStsLocation([res.sts.latitude, res.sts.longitude])
-                setPopupText(res.sts.wardNumber)
-                setStsID(res.sts._id)
+                setStsLocation([res.data.latitude, res.data.longitude])
+                setPopupText(res.data.wardNumber)
+                setStsID(res.data._id)
             }
         }
         if (stsLocation == "") fetchData()
@@ -275,127 +307,7 @@ export function StsOperationDialog2({ open, setOpen, data, add = false }) {
         const VehicleFleet = () => {
             if (uniqueVehicle) data = allVehicles
             else data = [...allVehicles, ...allVehicles, ...allVehicles]
-            // let data = [
-            //     {
-            //         "_id": "6621eb50008b38669df03b5f",
-            //         "vehicleId": "112",
-            //         "type": "Compactor",
-            //         "capacity": 5,
-            //         "fuelcostLoaded": 3,
-            //         "fuelcostUnloaded": 1,
-            //         "isFree": false,
-            //         "stsId": {
-            //             "_id": "660e00c8d7d1dfc2e850474d",
-            //             "wardNumber": 12,
-            //             "capacity": 50,
-            //             "latitude": 23.225214155047002,
-            //             "longitude": 91.31379747394024,
-            //             "manager": [
-            //                 "660e0003d7d1dfc2e8504714",
-            //                 "6611a7974502bd9589ce7523"
-            //             ]
-            //         },
-            //     },
-            //     {
-            //         "isFree": true,
-            //         "_id": "66101864568419c5eb684d8d",
-            //         "vehicleId": "46",
-            //         "type": "Container Carrier",
-            //         "capacity": 7,
-            //         "fuelcostLoaded": 9,
-            //         "fuelcostUnloaded": 1,
-            //     },
-            //     {
-            //         "isFree": true,
-            //         "_id": "66101851568419c5eb684d84",
-            //         "vehicleId": "45",
-            //         "type": "Compactor",
-            //         "capacity": 3,
-            //         "fuelcostLoaded": 2,
-            //         "fuelcostUnloaded": 1,
-            //     },
-            //     {
-            //         "isFree": true,
-            //         "_id": "6610183f568419c5eb684d7b",
-            //         "vehicleId": "34",
-            //         "type": "Open Truck",
-            //         "capacity": 15,
-            //         "fuelcostLoaded": 7,
-            //         "fuelcostUnloaded": 1,
-            //     },
-            //     {
-            //         "isFree": true,
-            //         "_id": "660e00ddd7d1dfc2e8504759",
-            //         "vehicleId": "32",
-            //         "type": "Dump Truck",
-            //         "capacity": 5,
-            //         "fuelcostLoaded": 4,
-            //         "fuelcostUnloaded": 1,
-            //     },
-            //     {
-            //         "isFree": true,
-            //         "_id": "660e00ddd7d1dfc2e8504759",
-            //         "vehicleId": "32",
-            //         "type": "Dump Truck",
-            //         "capacity": 7,
-            //         "fuelcostLoaded": 8,
-            //         "fuelcostUnloaded": 1,
-            //     },
-            //     {
-            //         "isFree": true,
-            //         "_id": "660e00ddd7d1dfc2e8504759",
-            //         "vehicleId": "32",
-            //         "type": "Dump Truck",
-            //         "capacity": 3,
-            //         "fuelcostLoaded": 10,
-            //         "fuelcostUnloaded": 2,
-            //     },
-            //     {
-            //         "isFree": true,
-            //         "_id": "660e00ddd7d1dfc2e8504759",
-            //         "vehicleId": "32",
-            //         "type": "Dump Truck",
-            //         "capacity": 15,
-            //         "fuelcostLoaded": 11,
-            //         "fuelcostUnloaded": 2,
-            //     },
-            //     {
-            //         "isFree": true,
-            //         "_id": "660e00ddd7d1dfc2e8504759",
-            //         "vehicleId": "32",
-            //         "type": "Dump Truck",
-            //         "capacity": 5,
-            //         "fuelcostLoaded": 8,
-            //         "fuelcostUnloaded": 2,
-            //     },
-            //     {
-            //         "isFree": true,
-            //         "_id": "660e00ddd7d1dfc2e8504759",
-            //         "vehicleId": "32",
-            //         "type": "Dump Truck",
-            //         "capacity": 7,
-            //         "fuelcostLoaded": 14,
-            //         "fuelcostUnloaded": 2,
-            //     },
-            //     {
-            //         "isFree": true,
-            //         "_id": "660e00ddd7d1dfc2e8504759",
-            //         "vehicleId": "32",
-            //         "type": "Dump Truck",
-            //         "capacity": 3,
-            //         "fuelcostLoaded": 6,
-            //         "fuelcostUnloaded": 2,
-            //     },
-            //     {
-            //         "isFree": true,
-            //         "_id": "660e00ddd7d1dfc2e8504759",
-            //         "vehicleId": "32",
-            //         "type": "Dump Truck",
-            //         "capacity": 15,
-            //         "fuelcostLoaded": 1,
-            //         "fuelcostUnloaded": 1,
-            //     }
-            // ]
+
             data.forEach(item => {
                 let average = (item.fuelcostLoaded / item.capacity).toFixed(2);
                 item.average = Number(average);
@@ -404,9 +316,7 @@ export function StsOperationDialog2({ open, setOpen, data, add = false }) {
                 return item1.average - item2.average
             })
 
-            //const stsTotalWaste = data[0]?.stsId?.capacity
             const stsTotalWaste = volume
-            //const stsTotalWaste = 37
 
             let editeStsTotalWaste = stsTotalWaste
             let cost = 0

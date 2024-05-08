@@ -57,20 +57,20 @@ function LandfillManager() {
             let res = await getSts();
             if (res.success) {
                 let sumVolumeDisposed = 0, sumTotalKiloMeter = 0, Capecity = 0;
-                res.wde.forEach(obj => {
+                res.data.forEach(obj => {
                     sumVolumeDisposed += obj.volumeDisposed
                     sumTotalKiloMeter += obj.totlaKiloMeter
                     Capecity = obj.landfillId.capacity
                 });
                 setVolumeDisposed(sumVolumeDisposed)
                 setTotalKiloMeter(sumTotalKiloMeter)
-                setTotalTrip(res.wde.length)
+                setTotalTrip(res.data.length)
                 setCapecity(Capecity)
 
                 const sevenDaysAgo = new Date();
                 sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-                const filteredData = res.wde.filter(obj => new Date(obj.createdAt) >= sevenDaysAgo);
+                const filteredData = res.data.filter(obj => new Date(obj.createdAt) >= sevenDaysAgo);
 
                 let tableData = filteredData.slice(-8);
                 tableData = tableData.map((item) => {

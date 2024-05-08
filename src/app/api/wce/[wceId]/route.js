@@ -19,11 +19,11 @@ export async function PUT(req, context) {
             const reqBody = await req.json()
             const { running } = reqBody
 
-            if (!mongoose.Types.ObjectId.isValid(context.params.wceId)) return NextResponse.json({ success: false, error: "WCE not exists" }, { status: 400 })
+            if (!mongoose.Types.ObjectId.isValid(context.params.wceId)) return NextResponse.json({ success: false, message: "WCE not exists" }, { status: 400 })
 
             const updateWce = await Wce.findOneAndUpdate({ _id: context.params.wceId }, { running }, { returnDocument: "after" })
 
-            if (!updateWce) return NextResponse.json({ success: false, error: "WCE not exists" }, { status: 400 })
+            if (!updateWce) return NextResponse.json({ success: false, message: "WCE not exists" }, { status: 400 })
 
             return NextResponse.json({
                 success: true,
@@ -34,16 +34,12 @@ export async function PUT(req, context) {
 
         const reqBody = await req.json()
 
-        if (!mongoose.Types.ObjectId.isValid(context.params.wceId)) return NextResponse.json({ success: false, error: "WCE not exists" }, { status: 400 })
+        if (!mongoose.Types.ObjectId.isValid(context.params.wceId)) return NextResponse.json({ success: false, message: "WCE not exists" }, { status: 400 })
 
         const updateWce = await Wce.findOneAndUpdate({ _id: context.params.wceId }, reqBody, { returnDocument: "after" })
 
-        if (!updateWce) return NextResponse.json({ success: false, error: "WCE not exists" }, { status: 400 })
+        if (!updateWce) return NextResponse.json({ success: false, message: "WCE not exists" }, { status: 400 })
 
-        // const margeData = await Wce.
-        //     findOne({ _id: updateWce._id }).select('-__v')
-        //     .populate({ path: 'stsId', select: '-__v', model: Sts }).populate({ path: 'vehicleId', select: '-__v', model: Vehicle })
-        //     .populate({ path: 'landfillId', select: '-__v', model: Landfill });
 
         return NextResponse.json({
             success: true,
@@ -51,7 +47,7 @@ export async function PUT(req, context) {
             data: updateWce
         }, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 })
     }
 }
 
@@ -60,21 +56,21 @@ export async function DELETE(req, context) {
         const logedInUser = await getDataFromToken(req);
         //only access System Admin and STS Manager
         if (logedInUser.role === "Landfill Manager") {
-            return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 })
         }
 
 
-        if (!mongoose.Types.ObjectId.isValid(context.params.wceId)) return NextResponse.json({ success: false, error: "WCE not exists" }, { status: 400 })
+        if (!mongoose.Types.ObjectId.isValid(context.params.wceId)) return NextResponse.json({ success: false, message: "WCE not exists" }, { status: 400 })
 
         const wce = await Wce.findByIdAndDelete({ _id: context.params.wceId })
 
-        if (!wce) return NextResponse.json({ success: false, error: "WCE not exists" }, { status: 400 })
+        if (!wce) return NextResponse.json({ success: false, message: "WCE not exists" }, { status: 400 })
 
         return NextResponse.json({
             success: true,
             message: `Successfully deleted WCE ${context.params.wceId}`
         }, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 })
     }
 }

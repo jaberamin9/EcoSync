@@ -68,7 +68,7 @@ export function UserOperationDialog({ open, setOpen, data, add = false }) {
             setOpen(false)
             queryClient.invalidateQueries({ queryKey: ['users'] })
         } else {
-            setError(res.error)
+            setError(res.message)
             setLoading(false)
         }
     }

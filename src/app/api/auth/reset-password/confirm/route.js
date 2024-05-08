@@ -12,6 +12,10 @@ export async function POST(req) {
         const { email } = reqBody
         const { otp } = reqBody
 
+        if (!email || !otp) {
+            return NextResponse.json({ success: false, message: "field are missing" }, { status: 400 })
+        }
+
         const user = await User.findOne({ email });
 
         const tokenValidates = speakeasy.totp.verify({
@@ -21,7 +25,7 @@ export async function POST(req) {
             window: 2
         });
 
-        if (!tokenValidates) return NextResponse.json({ success: false, error: "otp not valid" }, { status: 400 })
+        if (!tokenValidates) return NextResponse.json({ success: false, message: "otp not valid" }, { status: 400 })
 
         const resetToken = await tokenGenerate(user._id)
 
@@ -33,7 +37,7 @@ export async function POST(req) {
 
         return res;
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 });
     }
 
 }

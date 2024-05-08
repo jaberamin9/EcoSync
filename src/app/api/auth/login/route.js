@@ -13,6 +13,10 @@ export async function POST(req) {
         const reqBody = await req.json()
         const { email, password } = reqBody;
 
+        if (!email || !password) {
+            return NextResponse.json({ success: false, message: "field are missing" }, { status: 400 })
+        }
+
         const userCount = await User.countDocuments()
         if (userCount == 0) {
             const username = "admin"
@@ -51,17 +55,17 @@ export async function POST(req) {
         //check if user exists
         const user = await User.findOne({ email })
         if (!user) {
-            return NextResponse.json({ success: false, error: "User does not exist" }, { status: 400 })
+            return NextResponse.json({ success: false, message: "User does not exist" }, { status: 400 })
         }
 
         //check if password is correct
         const validPassword = await bcryptjs.compare(password, user.password)
         if (!validPassword) {
-            return NextResponse.json({ success: false, error: "Invalid password" }, { status: 400 })
+            return NextResponse.json({ success: false, message: "Invalid password" }, { status: 400 })
         }
 
         if (user.role === "Unassigned") {
-            return NextResponse.json({ success: false, error: "your role is not confirm by admin" }, { status: 400 })
+            return NextResponse.json({ success: false, message: "your role is not confirm by admin" }, { status: 400 })
         }
 
         const margeData = await Role.findOne({ role: user.role }).populate({ path: 'permissions', select: '-__v', model: Permissions });
@@ -89,6 +93,6 @@ export async function POST(req) {
         })
         return response;
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 })
     }
 }

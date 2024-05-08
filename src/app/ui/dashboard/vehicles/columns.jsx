@@ -202,7 +202,9 @@ export const columns = [
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <VehiclesOperationDialog open={open} setOpen={setOpen} data={landfill}></VehiclesOperationDialog>
+                    {open ? <VehiclesOperationDialog open={open} setOpen={setOpen} data={landfill}></VehiclesOperationDialog>
+                        : ""
+                    }
                 </>
             )
         },

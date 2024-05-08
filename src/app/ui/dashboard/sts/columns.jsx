@@ -17,13 +17,6 @@ import { StsOperationDialog } from "@/components/sts-operation-dialog";
 
 
 
-async function getBill(id) {
-    return fetch(`/api/wde/${id}/bill`, {
-        method: 'GET'
-    }).then(data => data.json())
-}
-
-
 export const columns = [
     {
         accessorKey: "wardNumber",
@@ -96,8 +89,9 @@ export const columns = [
                 <div className="flex justify-center" onClick={() => setOpen(true)}>
                     <div className="cursor-pointer text-center bg-gray-200 text-black rounded-sm w-[100px] p-1">see on map</div>
                 </div>
-                <Map location={row.getValue("location")} open={open} setOpen={setOpen} popupText={row.original.wardNumber}></Map>
-
+                {open ? <Map location={row.getValue("location")} open={open} setOpen={setOpen} popupText={row.original.wardNumber}></Map>
+                    : ""
+                }
             </>
         },
     },
@@ -107,17 +101,8 @@ export const columns = [
             const queryClient = useQueryClient();
             const { toast } = useToast()
             const [open, setOpen] = useState(false);
-            const [biiDialog, setBiiDialog] = useState(false);
-            const landfill = row.original
+            const data = row.original
 
-            const [data, setData] = useState()
-            const handleSubmit = async () => {
-                const res = await getBill(landfill.id);
-                if (res.success) {
-                    setData(res.data)
-                    setBiiDialog(true)
-                }
-            }
 
             const mutation = useMutation({
                 mutationFn: async (id) => {
@@ -152,13 +137,14 @@ export const columns = [
                             <DropdownMenuItem onClick={() => setOpen(true)}>Update</DropdownMenuItem>
                             <DropdownMenuItem
                                 className='text-red-400 hover:text-red-400 focus:text-red-400'
-                                onClick={() => { mutation.mutate(landfill.id) }}
-                            >
+                                onClick={() => { mutation.mutate(data.id) }}>
                                 Delete
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <StsOperationDialog open={open} setOpen={setOpen} data={landfill}></StsOperationDialog>
+                    {open ? <StsOperationDialog open={open} setOpen={setOpen} data={data}></StsOperationDialog>
+                        : ""
+                    }
                 </>
             )
         },

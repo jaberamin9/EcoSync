@@ -16,12 +16,12 @@ export async function GET(req) {
 
             return NextResponse.json({
                 success: true,
-                sts: sts[0] ? sts[0] : sts
+                data: sts[0] ? sts[0] : sts
             }, { status: 200 })
         }
 
         if (logedInUser.role != "System Admin") {
-            return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 })
         }
 
         const sts = await Sts.find().select("-__v")
@@ -29,10 +29,10 @@ export async function GET(req) {
 
         return NextResponse.json({
             success: true,
-            sts
+            data: sts
         }, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 })
     }
 }
 
@@ -40,17 +40,21 @@ export async function POST(req) {
     try {
         const logedInUser = await getDataFromToken(req);
         if (logedInUser.role != "System Admin") {
-            return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 })
         }
 
         const reqBody = await req.json()
         const { wardNumber, capacity, latitude, longitude, manager } = reqBody
 
+        if (!wardNumber || !capacity || !latitude || !longitude || !manager) {
+            return NextResponse.json({ success: false, message: "field are missing" }, { status: 400 })
+        }
+
         //check if user already exists
         const isstsExists = await Sts.findOne({ wardNumber })
 
         if (isstsExists) {
-            return NextResponse.json({ success: false, error: "STS already exists" }, { status: 400 })
+            return NextResponse.json({ success: false, message: "STS already exists" }, { status: 400 })
         }
 
         const newSts = new Sts({
@@ -63,16 +67,12 @@ export async function POST(req) {
 
         const savedSts = await newSts.save()
 
-        // const margeData = await Sts.
-        //     findOne({ _id: savedSts._id })
-        //     .select("-__v").populate({ path: 'manager', select: '_id username email role', model: User }).exec();
-
         return NextResponse.json({
             success: true,
             message: "STS add successfully",
             data: savedSts
         }, { status: 201 })
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 })
     }
 }

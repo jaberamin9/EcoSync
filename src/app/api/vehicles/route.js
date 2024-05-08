@@ -21,12 +21,12 @@ export async function GET(req) {
 
             return NextResponse.json({
                 success: true,
-                vehicles: newVehicles
+                data: newVehicles
             }, { status: 200 })
         }
 
         if (logedInUser.role != "System Admin") {
-            return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 })
         }
 
         const vehicles = await Vehicle.find().select("-__v")
@@ -35,10 +35,10 @@ export async function GET(req) {
 
         return NextResponse.json({
             success: true,
-            vehicles
+            data: vehicles
         }, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 })
     }
 }
 
@@ -46,17 +46,21 @@ export async function POST(req) {
     try {
         const logedInUser = await getDataFromToken(req);
         if (logedInUser.role != "System Admin") {
-            return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 })
         }
 
         const reqBody = await req.json()
         const { vehicleId, type, capacity, fuelcostLoaded, fuelcostUnloaded, stsId } = reqBody
 
+        if (!vehicleId || !type || !capacity || !fuelcostLoaded || !fuelcostUnloaded || !stsId) {
+            return NextResponse.json({ success: false, message: "field are missing" }, { status: 400 })
+        }
+
         //check if user already exists
         const vehicle = await Vehicle.findOne({ vehicleId })
 
         if (vehicle) {
-            return NextResponse.json({ success: false, error: "Vehicle already exists" }, { status: 400 })
+            return NextResponse.json({ success: false, message: "Vehicle already exists" }, { status: 400 })
         }
 
         const newVehicle = new Vehicle({
@@ -76,6 +80,6 @@ export async function POST(req) {
             data: savedVehicle
         }, { status: 201 })
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 })
     }
 }

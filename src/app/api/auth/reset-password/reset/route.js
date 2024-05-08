@@ -11,10 +11,14 @@ export async function POST(req) {
         const { password } = reqBody
         const { resetToken } = reqBody
 
+        if (!resetToken || !password) {
+            return NextResponse.json({ success: false, message: "field are missing" }, { status: 400 })
+        }
+
         const user = await User.findOne({ forgotPasswordToken: resetToken, forgotPasswordTokenExpiry: { $gt: Date.now() } });
 
         if (!user) {
-            return NextResponse.json({ error: "Invalid token" }, { status: 400 })
+            return NextResponse.json({ success: false, message: "Invalid token" }, { status: 400 })
         }
 
         //hash password
@@ -31,7 +35,7 @@ export async function POST(req) {
             success: true
         }, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 });
     }
 
 }

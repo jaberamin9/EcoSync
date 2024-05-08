@@ -93,7 +93,7 @@ export function LandfillOperationDialog({ open, setOpen, data, add = false }) {
             setOpen(false)
             queryClient.invalidateQueries({ queryKey: ['landfill'] })
         } else {
-            setError(res.error)
+            setError(res.message)
             setLoading(false)
         }
     }
@@ -103,7 +103,7 @@ export function LandfillOperationDialog({ open, setOpen, data, add = false }) {
         async function fetchData() {
             let res = await getUser();
             if (res.success) {
-                const data = res.users.map(item => {
+                const data = res.data.map(item => {
                     return {
                         value: item._id,
                         label: item.email

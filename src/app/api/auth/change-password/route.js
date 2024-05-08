@@ -11,26 +11,31 @@ export async function PUT(req) {
     try {
         const reqBody = await req.json()
         const { oldPassword, newPassword } = reqBody;
+
+        if (!oldPassword || !newPassword) {
+            return NextResponse.json({ success: false, message: "field are missing" }, { status: 400 })
+        }
+
         const logedInUser = await getDataFromToken(req);
         const email = logedInUser.email
 
         //check if user exists
         const user = await User.findOne({ email })
         if (!user) {
-            return NextResponse.json({ success: false, error: "User does not exist" }, { status: 400 })
+            return NextResponse.json({ success: false, message: "User does not exist" }, { status: 400 })
         }
 
         //check if password is correct
         const validPassword = await bcryptjs.compare(oldPassword, user.password)
         if (!validPassword) {
-            return NextResponse.json({ success: false, error: "Password not match" }, { status: 400 })
+            return NextResponse.json({ success: false, message: "Password not match" }, { status: 400 })
         }
 
         //hash password
         const salt = await bcryptjs.genSalt(10)
         const hashedPassword = await bcryptjs.hash(newPassword, salt)
 
-        const savePassword = await User.findOneAndUpdate({ email }, {
+        await User.findOneAndUpdate({ email }, {
             password: hashedPassword
         })
 
@@ -40,9 +45,8 @@ export async function PUT(req) {
             message: "Password update success"
         }, { status: 200 })
 
-        return res;
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 });
     }
 
 }

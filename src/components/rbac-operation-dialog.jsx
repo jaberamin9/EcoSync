@@ -63,7 +63,7 @@ export function RbacOperationDialog({ open, setOpen, data, add = false }) {
             setOpen(false)
             queryClient.invalidateQueries({ queryKey: ['rbac'] })
         } else {
-            setError(res.error)
+            setError(res.message)
             setLoading(false)
         }
     }

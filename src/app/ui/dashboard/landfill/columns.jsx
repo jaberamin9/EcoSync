@@ -16,11 +16,6 @@ import Map from "@/components/map";
 import { LandfillOperationDialog } from "@/components/landfill-operation-dialog";
 
 
-async function getBill(id) {
-    return fetch(`/api/wde/${id}/bill`, {
-        method: 'GET'
-    }).then(data => data.json())
-}
 
 function formatDate(dateVal) {
     var newDate = new Date(dateVal);
@@ -138,7 +133,9 @@ export const columns = [
                 <div className="flex justify-center" onClick={() => setOpen(true)}>
                     <div className="cursor-pointer text-center bg-gray-200 text-black rounded-sm w-[100px] p-1">see on map</div>
                 </div>
-                <Map location={row.getValue("location")} open={open} setOpen={setOpen} popupText={row.original.landfillName}></Map>
+                {open ? <Map location={row.getValue("location")} open={open} setOpen={setOpen} popupText={row.original.landfillName}></Map>
+                    : ""
+                }
             </>
         },
     },
@@ -148,17 +145,8 @@ export const columns = [
             const queryClient = useQueryClient();
             const { toast } = useToast()
             const [open, setOpen] = useState(false);
-            const [biiDialog, setBiiDialog] = useState(false);
             const landfill = row.original
 
-            const [data, setData] = useState()
-            const handleSubmit = async () => {
-                const res = await getBill(landfill.id);
-                if (res.success) {
-                    setData(res.data)
-                    setBiiDialog(true)
-                }
-            }
 
             const mutation = useMutation({
                 mutationFn: async (id) => {
@@ -199,7 +187,9 @@ export const columns = [
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <LandfillOperationDialog open={open} setOpen={setOpen} data={landfill}></LandfillOperationDialog>
+                    {open ? <LandfillOperationDialog open={open} setOpen={setOpen} data={landfill}></LandfillOperationDialog>
+                        : ""
+                    }
                 </>
             )
         },

@@ -13,10 +13,14 @@ export async function POST(req) {
         const reqBody = await req.json()
         const { email } = reqBody
 
+        if (!email) {
+            return NextResponse.json({ success: false, message: "field are missing" }, { status: 400 })
+        }
+
         const user = await User.findOne({ email });
 
         if (!user) {
-            return NextResponse.json({ success: false, error: "User not pound" }, { status: 400 })
+            return NextResponse.json({ success: false, message: "User not pound" }, { status: 400 })
         }
 
         //send code by email
@@ -28,6 +32,6 @@ export async function POST(req) {
         }, { status: 200 })
     } catch (error) {
         console.log(error)
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 })
     }
 }

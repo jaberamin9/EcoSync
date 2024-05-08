@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button"
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -86,7 +85,7 @@ export function StsOperationDialog({ open, setOpen, data, add = false }) {
             setOpen(false)
             queryClient.invalidateQueries({ queryKey: ['stsadmin'] })
         } else {
-            setError(res.error)
+            setError(res.message)
             setLoading(false)
         }
     }
@@ -96,7 +95,7 @@ export function StsOperationDialog({ open, setOpen, data, add = false }) {
         async function fetchData() {
             let res = await getUser();
             if (res.success) {
-                const data = res.users.map(item => {
+                const data = res.data.map(item => {
                     return {
                         value: item._id,
                         label: item.email

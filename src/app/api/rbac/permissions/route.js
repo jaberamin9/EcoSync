@@ -9,17 +9,17 @@ export async function GET(req) {
     try {
         const logedInUser = await getDataFromToken(req);
         if (logedInUser.role != "System Admin") {
-            return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 })
         }
 
         let permission = await Permissions.find()
         permission = permission.map(({ _doc: { __v, ...rest } }) => rest)
         return NextResponse.json({
             success: true,
-            permission: permission
+            data: permission
         }, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 })
     }
 }
 
@@ -27,7 +27,7 @@ export async function POST(req) {
     try {
         const logedInUser = await getDataFromToken(req);
         if (logedInUser.role != "System Admin") {
-            return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 })
         }
 
         const reqBody = await req.json()
@@ -47,19 +47,23 @@ export async function POST(req) {
             }, { status: 201 })
         }
 
+        if (!permissionsName || !permissionsValue) {
+            return NextResponse.json({ success: false, message: "field are missing" }, { status: 400 })
+        }
+
         const newPermissions = new Permissions({
             permissionsName,
             permissionsValue
         })
 
-        const savedPermissions = await newPermissions.save()
+        await newPermissions.save()
 
         return NextResponse.json({
             success: true,
             message: "Permission add successfully"
         }, { status: 201 })
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 })
     }
 }
 
@@ -67,7 +71,7 @@ export async function DELETE(req) {
     try {
         const logedInUser = await getDataFromToken(req);
         if (logedInUser.role != "System Admin") {
-            return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 })
         }
 
         const reqBody = await req.json()
@@ -75,7 +79,7 @@ export async function DELETE(req) {
         if (remove) {
             const isPermissionsExists = await Permissions.findOneAndDelete({ permissionsName })
 
-            if (!isPermissionsExists) return NextResponse.json({ success: false, error: "Permission not exists" }, { status: 400 })
+            if (!isPermissionsExists) return NextResponse.json({ success: false, message: "Permission not exists" }, { status: 400 })
 
             return NextResponse.json({
                 success: true,
@@ -83,7 +87,7 @@ export async function DELETE(req) {
             }, { status: 200 })
         }
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 })
     }
 }
 

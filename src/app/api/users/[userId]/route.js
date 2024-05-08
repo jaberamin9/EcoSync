@@ -9,15 +9,15 @@ connect()
 
 export async function GET(req, context) {
     try {
-        if (!mongoose.Types.ObjectId.isValid(context.params.userId)) return NextResponse.json({ success: false, error: "User not exists" }, { status: 400 })
+        if (!mongoose.Types.ObjectId.isValid(context.params.userId)) return NextResponse.json({ success: false, message: "User not exists" }, { status: 400 })
 
         let user = await User.findOne({ _id: context.params.userId })
 
-        if (!user) return NextResponse.json({ success: false, error: "User not exists" }, { status: 400 })
+        if (!user) return NextResponse.json({ success: false, message: "User not exists" }, { status: 400 })
 
         return NextResponse.json({
             success: true,
-            user: {
+            data: {
                 _id: user._id,
                 username: user.username,
                 email: user.email,
@@ -25,7 +25,7 @@ export async function GET(req, context) {
             }
         }, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 })
     }
 }
 
@@ -33,20 +33,20 @@ export async function PUT(req, context) {
     try {
         const logedInUser = await getDataFromToken(req);
         if (logedInUser.role != "System Admin") {
-            return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 })
         }
 
         const reqBody = await req.json()
 
-        if (!mongoose.Types.ObjectId.isValid(context.params.userId)) return NextResponse.json({ success: false, error: "User not exists" }, { status: 400 })
+        if (!mongoose.Types.ObjectId.isValid(context.params.userId)) return NextResponse.json({ success: false, message: "User not exists" }, { status: 400 })
 
         const user = await User.findOneAndUpdate({ _id: context.params.userId }, reqBody, { returnDocument: "after" })
 
-        if (!user) return NextResponse.json({ success: false, error: "User not exists" }, { status: 400 })
+        if (!user) return NextResponse.json({ success: false, message: "User not exists" }, { status: 400 })
 
         return NextResponse.json({
             success: true,
-            user: {
+            data: {
                 _id: user._id,
                 username: user.username,
                 email: user.email,
@@ -54,7 +54,7 @@ export async function PUT(req, context) {
             }
         }, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 })
     }
 }
 
@@ -62,20 +62,20 @@ export async function DELETE(req, context) {
     try {
         const logedInUser = await getDataFromToken(req);
         if (logedInUser.role != "System Admin") {
-            return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 })
+            return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 })
         }
 
-        if (!mongoose.Types.ObjectId.isValid(context.params.userId)) return NextResponse.json({ success: false, error: "User not exists" }, { status: 400 })
+        if (!mongoose.Types.ObjectId.isValid(context.params.userId)) return NextResponse.json({ success: false, message: "User not exists" }, { status: 400 })
 
         const user = await User.findByIdAndDelete({ _id: context.params.userId })
 
-        if (!user) return NextResponse.json({ success: false, error: "User not exists" }, { status: 400 })
+        if (!user) return NextResponse.json({ success: false, message: "User not exists" }, { status: 400 })
 
         return NextResponse.json({
             success: true,
             message: `Successfully deleted user ${context.params.userId}`
         }, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+        return NextResponse.json({ success: false, message: error.message }, { status: 500 })
     }
 }

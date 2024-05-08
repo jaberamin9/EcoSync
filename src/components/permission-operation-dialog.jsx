@@ -80,7 +80,7 @@ export function PermissionsOperationDialog({ open, setOpen, data, add = false })
             setOpen(false)
             queryClient.invalidateQueries({ queryKey: ['permissions'] })
         } else {
-            setError(res.error)
+            setError(res.message)
             setLoading(false)
         }
     }

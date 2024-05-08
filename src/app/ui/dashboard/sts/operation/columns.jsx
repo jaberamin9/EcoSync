@@ -170,8 +170,10 @@ export const columns = [
                 <div className="flex justify-center" onClick={() => setOpen(true)}>
                     <div className="cursor-pointer text-center bg-gray-200 text-black rounded-sm w-[100px] p-1">see on map</div>
                 </div>
-                <Map location={row.getValue("location")} open={open} setOpen={setOpen} popupText={row.original.landfillName}></Map>
-
+                {
+                    open ? <Map location={row.getValue("location")} open={open} setOpen={setOpen} popupText={row.original.landfillName}></Map>
+                        : ""
+                }
             </>
         },
     },
@@ -181,17 +183,16 @@ export const columns = [
             const queryClient = useQueryClient();
             const { toast } = useToast()
             const [open, setOpen] = useState(false);
-            const rowData = row.original
-
+            const data = row.original
 
             const mutation = useMutation({
                 mutationFn: async (id) => {
-                    await fetch(`/api/landfill/${rowData.landfill_id}`, {
+                    await fetch(`/api/landfill/${data.landfill_id}${localStorage.getItem('role') ? '/?update=updateCapacity' : ''}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ capacity: -rowData.volumeCollection })
+                        body: JSON.stringify({ capacity: -data.volumeCollection })
                     }).then(async data => {
                         return await fetch(`/api/wce/${id}`, {
                             method: 'DELETE'
@@ -225,13 +226,16 @@ export const columns = [
                             <DropdownMenuItem onClick={() => setOpen(true)}>Update</DropdownMenuItem>
                             <DropdownMenuItem
                                 className='text-red-400 hover:text-red-400 focus:text-red-400'
-                                onClick={() => { mutation.mutate(rowData.id) }}
+                                onClick={() => { mutation.mutate(data.id) }}
                             >
                                 Delete
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <StsOperationDialog2 open={open} setOpen={setOpen} data={rowData}></StsOperationDialog2>
+                    {
+                        open ? <StsOperationDialog2 open={open} setOpen={setOpen} data={data}></StsOperationDialog2>
+                            : ""
+                    }
                 </>
             )
         },
