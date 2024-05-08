@@ -5,6 +5,9 @@ import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 import { sendEmail } from "@/utils/mailer";
 import speakeasy from 'speakeasy';
+import Sts from "@/models/sts";
+import mongoose from "mongoose";
+import Landfill from "@/models/landfill";
 
 connect()
 
@@ -20,9 +23,24 @@ export async function GET(req) {
         const { key, value } = extractKeyValue(userType);
 
         let searchBy = {}
-        if (key) searchBy[key] = value
+        if (key) searchBy[key] = req.nextUrl.searchParams.get('role')
+
+        const val = { _id: { $nin: req.nextUrl.searchParams.get('id') } }
+
+        if (req.nextUrl.searchParams.get('landfill') === 'true') {
+            const sts = await Landfill.find(val).select("_id")
+                .populate({ path: 'manager', select: '_id', model: User });
+            const userId = sts.map(item => item.manager.map(item => item._id.toString())).flat()
+            searchBy['_id'] = { $nin: userId }
+        } else {
+            const sts = await Sts.find(val).select("_id")
+                .populate({ path: 'manager', select: '_id', model: User });
+            const userId = sts.map(item => item.manager.map(item => item._id.toString())).flat()
+            searchBy['_id'] = { $nin: userId }
+        }
 
         let users = await User.find(searchBy)
+
         users = users.map(({ _doc: { __v, password, otpSecretKey, forgotPasswordToken, forgotPasswordTokenExpiry, ...rest } }) => rest)
         return NextResponse.json({
             success: true,

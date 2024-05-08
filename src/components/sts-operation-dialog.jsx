@@ -37,8 +37,8 @@ async function addeSTS(credentials) {
     }).then(data => data.json())
 }
 
-async function getUser() {
-    return fetch(`/api/users/?role=STS Manager`, {
+async function getUser(assignUser = false, id, landfill = false) {
+    return fetch(`/api/users/?role=STS Manager&landfill=${landfill}${!assignUser ? `&id=${id}` : ''}`, {
         method: 'GET'
     }).then(data => data.json())
 }
@@ -93,7 +93,7 @@ export function StsOperationDialog({ open, setOpen, data, add = false }) {
 
     useEffect(() => {
         async function fetchData() {
-            let res = await getUser();
+            let res = await getUser(add, data.id);
             if (res.success) {
                 const data = res.data.map(item => {
                     return {

@@ -169,8 +169,9 @@ export function DataTable({
                 </Button>
             </div>
 
-            <LandfillOperationDialog open={open} setOpen={setOpen} data={""} add={true}></LandfillOperationDialog>
-
+            {open ? <LandfillOperationDialog open={open} setOpen={setOpen} data={""} add={true}></LandfillOperationDialog>
+                : ''
+            }
         </div >
     )
 }

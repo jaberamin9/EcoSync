@@ -32,7 +32,6 @@ export default function Page() {
                             }
                         }),
                         manager_id: item.manager.map(manager => manager._id),
-
                     }
                 })
                 return newData

@@ -40,8 +40,9 @@ async function addeLandfill(credentials) {
     }).then(data => data.json())
 }
 
-async function getUser() {
-    return fetch(`/api/users/?role=Landfill Manager`, {
+
+async function getUser(assignUser = false, id, landfill = false) {
+    return fetch(`/api/users/?role=Landfill Manager&landfill=${landfill}${!assignUser ? `&id=${id}` : ''}`, {
         method: 'GET'
     }).then(data => data.json())
 }
@@ -101,7 +102,7 @@ export function LandfillOperationDialog({ open, setOpen, data, add = false }) {
 
     useEffect(() => {
         async function fetchData() {
-            let res = await getUser();
+            let res = await getUser(add, data.id, true);
             if (res.success) {
                 const data = res.data.map(item => {
                     return {
