@@ -17,7 +17,7 @@ if (role == "System Admin") {
             icon: <Icon icon="solar:square-transfer-vertical-broken" width="24" height="24" />,
             submenu: true,
             subMenuItems: [
-                { title: 'STS Operation', path: '/ui/dashboard/sts' },
+                { title: 'Add STS', path: '/ui/dashboard/sts' },
                 { title: 'STS-wce', path: '/ui/dashboard/sts/operation' },
 
             ]
@@ -28,7 +28,7 @@ if (role == "System Admin") {
             icon: <Icon icon="material-symbols:landscape-2-outline" width="24" height="24" />,
             submenu: true,
             subMenuItems: [
-                { title: 'Landfill Operation', path: '/ui/dashboard/landfill' },
+                { title: 'Add Landfill', path: '/ui/dashboard/landfill' },
                 { title: 'Incoming', path: '/ui/dashboard/landfill/incoming' },
                 { title: 'Arrived', path: '/ui/dashboard/landfill/arrived' },
             ],
